@@ -1,6 +1,6 @@
 (function(){
   var updateVol = 16;
-  var originLink = 'https://coinpaprika.com';
+  var originLink = 'https://cdn.jsdelivr.net/gh/coinpaprika/widget-currency/src/';
   var widgetsStates = [];
   var widgetFunctions = {
     init: function(index){
@@ -185,7 +185,7 @@
       return Math[direction](amount * decimal) / decimal;
     },
     stylesheet: function(){
-      var url = originLink +'/widget/currency_widget.css?rev='+updateVol;
+      var url = originLink +'/widget.min.css';
       var link = document.createElement('link');
       link.setAttribute('rel', 'stylesheet');
       link.setAttribute('href', url);
@@ -280,7 +280,7 @@
     },
     main_logo_link: function(index){
       var data = widgetsStates[index];
-      return data.originLink +'/widget/logo_widget.svg?rev='+data.updateVol
+      return data.originLink +'/logo_widget.svg'
     },
   };
   
