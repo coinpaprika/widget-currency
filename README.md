@@ -1,13 +1,12 @@
-## Coinpaprika Currency Widget
-
-![Coinpaprika Currency Widget Image](https://i.imgur.com/Xwf3EKf.png)
-
-### How to use
+# Coinpaprika Currency Widget
+<img src="https://i.imgur.com/Xwf3EKf.png" alt="" data-canonical-src="https://i.imgur.com/Xwf3EKf.png"/>
 
 
-#### Parameters: 
+## How to use
 
-**data-currency** - widget main currency represented by {shortName-fullName} ex. 'btc-bitcoin'
+### Parameters: 
+
+**data-currency** - Currency ID that you can get from [API](https://api.coinpaprika.com/#tag/coins) ex. 'btc-bitcoin'
 ```text
 default: 'BTC'
 ```
@@ -18,6 +17,14 @@ default: 'USD'
 ```
 
 **data-version** - 'standard' or 'extended'
+
+##### Standard widget:
+<img src="https://i.imgur.com/Og4f6sN.png" alt="" data-canonical-src="https://i.imgur.com/Og4f6sN.png" height="80" />
+
+##### Extended widget:
+<img src="https://i.imgur.com/7JGiq0b.png" alt="" data-canonical-src="https://i.imgur.com/7JGiq0b.png" height="148" />
+
+######
 ```text
 default: 'extended'
 ```
@@ -32,63 +39,71 @@ deafult: false
 default: '30s'
 ```
 
-#### Copy paste this code in your HTML, replacing data parameters
+### Night Mode: 
+
+<img src="https://i.imgur.com/umLLWUz.png" alt="" data-canonical-src="https://i.imgur.com/umLLWUz.png" height="148" />
+
+######
+
+Enable styling for dark backgrounds by adding `cp-widget__night-mode` class to widget element
+
 
 ```html
-<div class="coinpaprika-currency-widget-2546354" 
+<div class="coinpaprika-currency-widget cp-widget__night-mode"></div>
+```
+
+
+### Copy paste this code in your HTML, replacing data parameters
+
+```html
+<div class="coinpaprika-currency-widget" 
      data-primary-currency="USD" 
      data-currency="btc-bitcoin" 
      data-version="extended" 
      data-update-active="false" 
      data-update-timeout="30s"></div>
-<script type="text/javascript" src="https://coinpaprika.com/widget/currency_widget.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/coinpaprika/widget-currency/src/widget.min.js"></script>
 ```
 
-#### Via npm
+### Via npm
 
 `npm install coinpaprika-widget-currency`
 
 Then add this to your HTML, replacing data parameters
 
 ```html
-<div class="coinpaprika-currency-widget-2546354" 
+<div class="coinpaprika-currency-widget" 
      data-primary-currency="USD" 
      data-currency="btc-bitcoin" 
      data-version="extended" 
      data-update-active="false" 
      data-update-timeout="30s"></div>
-<script src="../node_modules/github-card/dist/widget.js"></script>
+<script src="../node_modules/coinpaprika-widget-currency/dist/widget.js"></script>
 ```
 
-#### Via bower
+### Via bower
 
 `bower install coinpaprika-widget-currency`
 
 Then add this to your HTML, replacing data parameters
 
 ```html
-<div class="coinpaprika-currency-widget-2546354" 
+<div class="coinpaprika-currency-widget" 
      data-primary-currency="USD" 
      data-currency="btc-bitcoin" 
      data-version="extended" 
      data-update-active="false" 
      data-update-timeout="30s"></div>
-<script src="/bower_components/coinpaprika-widget-currency/dist/widget.js"></script>
+<script src="../bower_components/coinpaprika-widget-currency/dist/widget.js"></script>
 ```
 
-#### Using multiple widgets in same page
+### Using multiple widgets in same page
 
 ```html
-<div class="coinpaprika-currency-widget-2546354" 
-     data-primary-currency="USD" 
-     data-currency="btc-bitcoin" 
-     data-version="extended" 
-     data-update-active="false"></div>
-<div class="coinpaprika-currency-widget-2546354" 
-     data-primary-currency="USD" 
+<div class="coinpaprika-currency-widget"></div>
+<div class="coinpaprika-currency-widget" 
      data-currency="xrp-xrp" 
      data-version="standard" 
-     data-update-active="true" 
-     data-update-timeout="30s"></div>
-<script type="text/javascript" src="https://coinpaprika.com/widget/currency_widget.js"></script>
+     data-update-active="true"></div>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/coinpaprika/widget-currency/src/widget.min.js"></script>
 ```

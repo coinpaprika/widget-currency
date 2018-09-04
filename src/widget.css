@@ -6,55 +6,45 @@
   font-style: normal;
 }
 
-#coinpaprika-currency-widget-2546354.night-mode-2546354,
-.coinpaprika-currency-widget-2546354.night-mode-2546354 {
+.coinpaprika-currency-widget.cp-widget__night-mode {
   border-color: #505050;
   border-bottom-color: transparent;
 }
 
-#coinpaprika-currency-widget-2546354.night-mode-2546354 .cp-widget__header,
-.coinpaprika-currency-widget-2546354.night-mode-2546354 .cp-widget__header {
+.coinpaprika-currency-widget.cp-widget__night-mode .cp-widget__header {
   color: #ffffff;
 }
 
-#coinpaprika-currency-widget-2546354.night-mode-2546354 .cp-widget__header h3,
-.coinpaprika-currency-widget-2546354.night-mode-2546354 .cp-widget__header h3 {
+.coinpaprika-currency-widget.cp-widget__night-mode .cp-widget__header h3 {
   color: #ffffff;
 }
 
-#coinpaprika-currency-widget-2546354.night-mode-2546354 .cp-widget__header strong,
-.coinpaprika-currency-widget-2546354.night-mode-2546354 .cp-widget__header strong {
+.coinpaprika-currency-widget.cp-widget__night-mode .cp-widget__header strong {
   color: #ffffff;
 }
 
-#coinpaprika-currency-widget-2546354.night-mode-2546354 .cp-widget__details,
-.coinpaprika-currency-widget-2546354.night-mode-2546354 .cp-widget__details {
+.coinpaprika-currency-widget.cp-widget__night-mode .cp-widget__details {
   border-color: #505050;
 }
 
-#coinpaprika-currency-widget-2546354.night-mode-2546354 .cp-widget__details > div,
-.coinpaprika-currency-widget-2546354.night-mode-2546354 .cp-widget__details > div {
+.coinpaprika-currency-widget.cp-widget__night-mode .cp-widget__details > div {
   border-color: #505050;
   color: #ffffff;
 }
 
-#coinpaprika-currency-widget-2546354.night-mode-2546354 .cp-widget__details > div small,
-.coinpaprika-currency-widget-2546354.night-mode-2546354 .cp-widget__details > div small {
+.coinpaprika-currency-widget.cp-widget__night-mode .cp-widget__details > div small {
   color: #ffffff;
 }
 
-#coinpaprika-currency-widget-2546354.night-mode-2546354 .cp-widget__footer,
-.coinpaprika-currency-widget-2546354.night-mode-2546354 .cp-widget__footer {
+.coinpaprika-currency-widget.cp-widget__night-mode .cp-widget__footer {
   color: #ffffff;
 }
 
-#coinpaprika-currency-widget-2546354.night-mode-2546354 a,
-.coinpaprika-currency-widget-2546354.night-mode-2546354 a {
+.coinpaprika-currency-widget.cp-widget__night-mode a {
   color: #80a6e5;
 }
 
-#coinpaprika-currency-widget-2546354,
-.coinpaprika-currency-widget-2546354 {
+.coinpaprika-currency-widget {
   border: 1px solid #f0f0f0;
   border-bottom-color: transparent;
   margin-bottom: 20px;
@@ -65,13 +55,11 @@
   line-height: 1.5;
 }
 
-#coinpaprika-currency-widget-2546354 *,
-.coinpaprika-currency-widget-2546354 * {
+.coinpaprika-currency-widget * {
   box-sizing: border-box;
 }
 
-#coinpaprika-currency-widget-2546354 .cp-widget__header,
-.coinpaprika-currency-widget-2546354 .cp-widget__header {
+.coinpaprika-currency-widget .cp-widget__header {
   padding: 15px;
   color: #000000;
   margin-bottom: 0;
@@ -80,9 +68,8 @@
   display: flex;
 }
 
-#coinpaprika-currency-widget-2546354 .cp-widget__header h3,
-.coinpaprika-currency-widget-2546354 .cp-widget__header h3 {
-  font-family: consolas, monospace;
+.coinpaprika-currency-widget .cp-widget__header h3 {
+  font-family: consolas monospace;
   font-size: 25px;
   line-height: 1;
   margin: 5px 0 0;
@@ -90,50 +77,43 @@
   font-weight: 700;
 }
 
-#coinpaprika-currency-widget-2546354 .cp-widget__header h3 .symbolTicker,
-.coinpaprika-currency-widget-2546354 .cp-widget__header h3 .symbolTicker {
+.coinpaprika-currency-widget .cp-widget__header h3 .symbolTicker {
   font-size: 18px;
   font-weight: normal;
   margin-left: 10px;
 }
 
-#coinpaprika-currency-widget-2546354 .cp-widget__header strong,
-.coinpaprika-currency-widget-2546354 .cp-widget__header strong {
+.coinpaprika-currency-widget .cp-widget__header strong {
   display: block;
   font-size: 18px;
   margin-bottom: 2px;
   color: #333333;
 }
 
-#coinpaprika-currency-widget-2546354 .cp-widget__main,
-.coinpaprika-currency-widget-2546354 .cp-widget__main {
+.coinpaprika-currency-widget .cp-widget__main {
   margin-left: 15px;
 }
 
-#coinpaprika-currency-widget-2546354 .cp-widget__main a,
-.coinpaprika-currency-widget-2546354 .cp-widget__main a {
+.coinpaprika-currency-widget .cp-widget__main a {
   text-decoration: none;
   color: inherit;
 }
 
-#coinpaprika-currency-widget-2546354 .cp-widget__main .cp-widget__main-no-data,
-.coinpaprika-currency-widget-2546354 .cp-widget__main .cp-widget__main-no-data {
+.coinpaprika-currency-widget .cp-widget__main .cp-widget__main-no-data {
   height: 80px;
   font-size: 15px;
   line-height: 80px;
   font-weight: 600;
 }
 
-#coinpaprika-currency-widget-2546354 .cp-widget__details,
-.coinpaprika-currency-widget-2546354 .cp-widget__details {
+.coinpaprika-currency-widget .cp-widget__details {
   border-top: 1px solid #f0f0f0;
   margin-bottom: 15px;
   justify-content: space-between;
   display: flex;
 }
 
-#coinpaprika-currency-widget-2546354 .cp-widget__details > div,
-.coinpaprika-currency-widget-2546354 .cp-widget__details > div {
+.coinpaprika-currency-widget .cp-widget__details > div {
   padding: 15px;
   border-left: 1px solid #f0f0f0;
   font-size: 16px;
@@ -141,27 +121,23 @@
   color: #333333;
 }
 
-#coinpaprika-currency-widget-2546354 .cp-widget__details > div:first-child,
-.coinpaprika-currency-widget-2546354 .cp-widget__details > div:first-child {
+.coinpaprika-currency-widget .cp-widget__details > div:first-child {
   border-left: none;
 }
 
-#coinpaprika-currency-widget-2546354 .cp-widget__details > div small,
-.coinpaprika-currency-widget-2546354 .cp-widget__details > div small {
+.coinpaprika-currency-widget .cp-widget__details > div small {
   display: block;
   margin-bottom: 5px;
   color: #c4c4c4;
   font-size: 12px;
 }
 
-#coinpaprika-currency-widget-2546354 .cp-widget__details > div [class*="cp-widget__rank"],
-.coinpaprika-currency-widget-2546354 .cp-widget__details > div [class*="cp-widget__rank"] {
+.coinpaprika-currency-widget .cp-widget__details > div [class*="cp-widget__rank"] {
   display: block;
   font-size: 12px;
 }
 
-#coinpaprika-currency-widget-2546354 .cp-widget__footer,
-.coinpaprika-currency-widget-2546354 .cp-widget__footer {
+.coinpaprika-currency-widget .cp-widget__footer {
   position: absolute;
   right: 0;
   bottom: -9px;
@@ -172,10 +148,8 @@
   padding: 0 30px 0 5px;
 }
 
-#coinpaprika-currency-widget-2546354 .cp-widget__footer:before,
-#coinpaprika-currency-widget-2546354 .cp-widget__footer:after,
-.coinpaprika-currency-widget-2546354 .cp-widget__footer:before,
-.coinpaprika-currency-widget-2546354 .cp-widget__footer:after {
+.coinpaprika-currency-widget .cp-widget__footer:after,
+.coinpaprika-currency-widget .cp-widget__footer:before {
   content: '';
   position: absolute;
   top: 50%;
@@ -185,35 +159,29 @@
   background: #f0f0f0;
 }
 
-#coinpaprika-currency-widget-2546354.night-mode-2546354 .cp-widget__footer:before,
-#coinpaprika-currency-widget-2546354.night-mode-2546354 .cp-widget__footer:after,
-.coinpaprika-currency-widget-2546354.night-mode-2546354 .cp-widget__footer:before,
-.coinpaprika-currency-widget-2546354.night-mode-2546354 .cp-widget__footer:after {
+.coinpaprika-currency-widget.cp-widget__night-mode .cp-widget__footer:after,
+.coinpaprika-currency-widget.cp-widget__night-mode .cp-widget__footer:before {
   background: #505050;
 }
 
-#coinpaprika-currency-widget-2546354 .cp-widget__footer:before,
-.coinpaprika-currency-widget-2546354 .cp-widget__footer:before {
+.coinpaprika-currency-widget .cp-widget__footer:before {
   width: calc(100% - 212px);
   left: -1px;
 }
 
-#coinpaprika-currency-widget-2546354 .cp-widget__footer:after,
-.coinpaprika-currency-widget-2546354 .cp-widget__footer:after {
+.coinpaprika-currency-widget .cp-widget__footer:after {
   right: -1px;
   width: 25px;
 }
 
-#coinpaprika-currency-widget-2546354 .cp-widget__footer img,
-.coinpaprika-currency-widget-2546354 .cp-widget__footer img {
+.coinpaprika-currency-widget .cp-widget__footer img {
   margin: -3px 5px 0 3px;
   display: inline-block;
   width: 16px;
   vertical-align: middle;
 }
 
-#coinpaprika-currency-widget-2546354 .cp-widget__rank-label,
-.coinpaprika-currency-widget-2546354 .cp-widget__rank-label {
+.coinpaprika-currency-widget .cp-widget__rank-label {
   padding: 2px 5px;
   display: inline-block;
   vertical-align: middle;
@@ -222,102 +190,84 @@
   font-weight: normal;
 }
 
-#coinpaprika-currency-widget-2546354 .cp-widget__rank-down,
-.coinpaprika-currency-widget-2546354 .cp-widget__rank-down {
+.coinpaprika-currency-widget .cp-widget__rank-down {
   color: #e15241;
 }
 
-#coinpaprika-currency-widget-2546354 .cp-widget__rank-up,
-.coinpaprika-currency-widget-2546354 .cp-widget__rank-up {
+.coinpaprika-currency-widget .cp-widget__rank-up {
   color: #43aa05;
 }
 
-#coinpaprika-currency-widget-2546354 .cp-widget__rank-neutral,
-.coinpaprika-currency-widget-2546354 .cp-widget__rank-neutral {
+.coinpaprika-currency-widget .cp-widget__rank-neutral {
   color: #9a9a9a;
 }
 
-#coinpaprika-currency-widget-2546354 .cp-widget__img.cp-widget__img--hidden,
-.coinpaprika-currency-widget-2546354 .cp-widget__img.cp-widget__img--hidden {
+.coinpaprika-currency-widget .cp-widget__img.cp-widget__img--hidden {
   display: none;
 }
 
-#coinpaprika-currency-widget-2546354 .cp-widget__img,
-.coinpaprika-currency-widget-2546354 .cp-widget__img {
+.coinpaprika-currency-widget .cp-widget__img {
   height: 80px;
   width: 80px;
 }
 
-#coinpaprika-currency-widget-2546354 .cp-widget__img img,
-.coinpaprika-currency-widget-2546354 .cp-widget__img img {
+.coinpaprika-currency-widget .cp-widget__img img {
   height: 80px;
   width: 80px;
   max-width: 80px;
 }
 
-#coinpaprika-currency-widget-2546354 a,
-.coinpaprika-currency-widget-2546354 a {
+.coinpaprika-currency-widget a {
   color: #0645ad;
 }
 
 @media (max-width: 767px){
-  #coinpaprika-currency-widget-2546354,
-  .coinpaprika-currency-widget-2546354 {
+  .coinpaprika-currency-widget {
     font-size: 10px;
     min-width: 260px;
     max-width: 360px;
   }
 
-  #coinpaprika-currency-widget-2546354 .cp-widget__header h3,
-  .coinpaprika-currency-widget-2546354 .cp-widget__header h3 {
+  .coinpaprika-currency-widget .cp-widget__header h3 {
     font-size: 20px;
   }
 
-  #coinpaprika-currency-widget-2546354 .cp-widget__header h3 .symbolTicker,
-  .coinpaprika-currency-widget-2546354 .cp-widget__header h3 .symbolTicker {
+  .coinpaprika-currency-widget .cp-widget__header h3 .symbolTicker {
     font-size: 15px;
   }
 
-  #coinpaprika-currency-widget-2546354 .cp-widget__header strong,
-  .coinpaprika-currency-widget-2546354 .cp-widget__header strong {
+  .coinpaprika-currency-widget .cp-widget__header strong {
     font-size: 15px;
   }
 
-  #coinpaprika-currency-widget-2546354 .cp-widget__main .cp-widget__main-no-data,
-  .coinpaprika-currency-widget-2546354 .cp-widget__main .cp-widget__main-no-data {
+  .coinpaprika-currency-widget .cp-widget__main .cp-widget__main-no-data {
     font-size: 12px;
     height: 70px;
     line-height: 70px;
   }
 
-  #coinpaprika-currency-widget-2546354 .cp-widget__details > div,
-  .coinpaprika-currency-widget-2546354 .cp-widget__details > div {
+  .coinpaprika-currency-widget .cp-widget__details > div {
     font-size: 13px;
   }
 
-  #coinpaprika-currency-widget-2546354 .cp-widget__details > div small,
-  .coinpaprika-currency-widget-2546354 .cp-widget__details > div small {
+  .coinpaprika-currency-widget .cp-widget__details > div small {
     font-size: 10px;
   }
 
-  #coinpaprika-currency-widget-2546354 .cp-widget__details > div [class*="cp-widget__rank"],
-  .coinpaprika-currency-widget-2546354 .cp-widget__details > div [class*="cp-widget__rank"] {
+  .coinpaprika-currency-widget .cp-widget__details > div [class*="cp-widget__rank"] {
     font-size: 10px;
   }
 
-  #coinpaprika-currency-widget-2546354 .cp-widget__footer:before,
-  .coinpaprika-currency-widget-2546354 .cp-widget__footer:before {
+  .coinpaprika-currency-widget .cp-widget__footer:before {
     width: calc(100% - 187px);
   }
 
-  #coinpaprika-currency-widget-2546354 .cp-widget__img,
-  .coinpaprika-currency-widget-2546354 .cp-widget__img {
+  .coinpaprika-currency-widget .cp-widget__img {
     height: 70px!important;
     width: 70px!important;
   }
 
-  #coinpaprika-currency-widget-2546354 .cp-widget__img img,
-  .coinpaprika-currency-widget-2546354 .cp-widget__img img {
+  .coinpaprika-currency-widget .cp-widget__img img {
     height: 70px!important;
     width: 70px!important;
     max-width: 70px!important;
@@ -325,8 +275,7 @@
 }
 
 @media (min-width: 768px){
-  #coinpaprika-currency-widget-2546354,
-  .coinpaprika-currency-widget-2546354 {
+  .coinpaprika-currency-widget {
     width: 360px;
   }
 }

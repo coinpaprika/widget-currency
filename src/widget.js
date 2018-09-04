@@ -1,14 +1,45 @@
 (function(){
-  var updateVol = 16;
-  var originLink = 'https://cdn.jsdelivr.net/gh/coinpaprika/widget-currency/src/';
+  var originIncrement;
+  var originLink = null;
+  var originsArray = [
+    '../node_modules/coinpaprika-widget-currency/src',
+    '../bower_components/coinpaprika-widget-currency/src',
+    './src',
+    'https://cdn.jsdelivr.net/gh/coinpaprika/widget-currency/src',
+  ];
   var widgetsStates = [];
   var widgetFunctions = {
     init: function(index){
       if (!widgetFunctions.getMainElement(index)) {
-        return console.error('Bind failed, no element with ID = "coinpaprika-currency-widget-2546354"');
+        return console.error('Bind failed, no element with class = "coinpaprika-currency-widget"');
       }
-      widgetFunctions.addWidgetElement(index);
-      widgetFunctions.initInterval(index);
+      originIncrement = 0;
+      widgetFunctions.setOriginLink(index);
+    },
+    setOriginLink: function(index){
+      var originLinkToCheck = originsArray[originIncrement];
+      if (originLinkToCheck){
+        // console.log({originLinkToCheck, originIncrement});
+        originIncrement++;
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', originLinkToCheck+'/widget.css');
+        xhr.onload = function(){
+          // console.log({originLinkToCheck, xhr});
+          if (xhr.status === 200) {
+            originLink = originLinkToCheck;
+            widgetFunctions.stylesheet();
+            widgetFunctions.addWidgetElement(index);
+            widgetFunctions.initInterval(index);
+          } else {
+            widgetFunctions.setOriginLink(index);
+          }
+        };
+        xhr.onerror = function(){
+          // console.log({originLinkToCheck, xhr});
+          widgetFunctions.setOriginLink(index);
+        };
+        xhr.send();
+      }
     },
     getMainElement: function(index){
       return widgetsStates[index].mainElement;
@@ -28,7 +59,7 @@
       xhr.onerror = function(){
         widgetFunctions.onErrorRequest(index, xhr);
       };
-      xhr.send();
+      
     },
     onErrorRequest: function(index, xhr){
       if (widgetsStates[index].isData) widgetFunctions.updateData(index, 'isData', false);
@@ -105,7 +136,6 @@
         if (mainElement.dataset.showDetailsCurrency) widgetFunctions.updateData(index, 'showDetailsCurrency', (mainElement.dataset.showDetailsCurrency === 'true'));
         if (mainElement.dataset.updateActive) widgetFunctions.updateData(index, 'updateActive', (mainElement.dataset.updateActive === 'true'));
         if (mainElement.dataset.updateTimeout) widgetFunctions.updateData(index, 'updateTimeout', widgetFunctions.parseIntervalValue(mainElement.dataset.updateTimeout));
-        if (mainElement.dataset.updateVol) widgetFunctions.updateData(index, 'updateVol', mainElement.dataset.updateVol);
       }
     },
     updateData: function(index, key, value, ticker){
@@ -189,7 +219,7 @@
       var link = document.createElement('link');
       link.setAttribute('rel', 'stylesheet');
       link.setAttribute('href', url);
-      return (document.body.querySelector('link[href='+url+']')) ? '' : document.body.appendChild(link);
+      return (document.body.querySelector('link[href="'+url+'"]')) ? '' : document.body.appendChild(link);
     },
     widgetMainElement: function(index){
       var data = widgetsStates[index];
@@ -287,14 +317,10 @@
   function initWidgets(){
     if (!window.cpWidgetsInitialized2546354){
       window.cpWidgetsInitialized2546354 = true;
-      var mainElements = Array.prototype.slice.call(document.getElementsByClassName('coinpaprika-currency-widget-2546354'));
-      var widgetById = document.getElementById('coinpaprika-currency-widget-2546354');
-      if (widgetById) mainElements.push(widgetById);
+      var mainElements = Array.prototype.slice.call(document.getElementsByClassName('coinpaprika-currency-widget'));
       widgetsStates = [];
-      widgetFunctions.stylesheet();
       for(var i = 0; i < mainElements.length; i++){
         widgetsStates.push({
-          updateVol: updateVol,
           mainElement: mainElements[i],
           version: 'standard',
           originLink: originLink,
