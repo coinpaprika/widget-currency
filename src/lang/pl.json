@@ -1,20 +1,9 @@
 {
-  "#__language": "${polski/Polish (pl)}",
-  "#__translator": "coinpaprika",
-  "#__revision_date": "2018-09-05",
-
-  "#__rank_org": "Rank",
   "rank": "Ranking",
-
-  "#__ath_org": "ATH",
   "ath": "ATH",
-
-  "#__volume_24h_org": "Volume 24h",
   "volume_24h": "Wolumen 24h",
-
-  "#__market_cap_org": "Market Cap",
   "market_cap": "Kapitalizacja rynku",
-
-  "#__powered_by_org": "powered by",
-  "powered_by": "wspierany przez"
+  "powered_by": "wspierany przez",
+  "data_unavailable": "Dane są obecnie niedostępne",
+  "data_loading": "Wczytywanie danych..."
 }

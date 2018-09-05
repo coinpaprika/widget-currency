@@ -29,10 +29,11 @@
     },
     interval: null,
     isData: false,
-    message: 'Data is loading...',
+    message: 'data_loading',
     origin_src: null,
     translations: {},
     mainElement: null,
+    noTranslationLabels: [],
   };
   var widgetFunctions = {
     init: function(index){
@@ -76,7 +77,7 @@
     },
     onErrorRequest: function(index, xhr){
       if (widgetsStates[index].isData) widgetFunctions.updateData(index, 'isData', false);
-      widgetFunctions.updateData(index, 'message', 'Data is currently unavailable');
+      widgetFunctions.updateData(index, 'message', 'data_unavailable');
       console.error('Request failed.  Returned status of ' + xhr, widgetsStates[index]);
     },
     initInterval: function(index){
@@ -92,7 +93,22 @@
       var details = (widgetsStates[index].version === 'extended') ? '<div class="cp-widget__details">' + widgetFunctions.widgetAthElement(index) + widgetFunctions.widgetVolume24hElement(index) + widgetFunctions.widgetMarketCapElement(index) + '</div>' : '';
       var widgetElement = widgetFunctions.widgetMainElement(index) + details + widgetFunctions.widgetFooter(index);
       mainElement.innerHTML = widgetElement;
+      widgetFunctions.setBeforeElementInFooter(index);
       widgetFunctions.getData(index);
+    },
+    setBeforeElementInFooter: function(index){
+      var mainElement = widgetFunctions.getMainElement(index);
+      if (mainElement.children[0].localName === 'style'){
+        mainElement.removeChild(mainElement.childNodes[0]);
+      }
+      var footerElement = mainElement.querySelector('.cp-widget__footer');
+      var value = footerElement.getBoundingClientRect().width - 43;
+      for (var i = 0; i < footerElement.childNodes.length; i++){
+        value -= footerElement.childNodes[i].getBoundingClientRect().width;
+      }
+      var style = document.createElement('style');
+      style.innerHTML = '.cp-widget__footer--'+index+'::before{width:'+value.toFixed(0)+'px;}';
+      mainElement.insertBefore(style, mainElement.children[0]);
     },
     getDefaults: function(index){
       var mainElement = widgetFunctions.getMainElement(index);
@@ -169,6 +185,33 @@
         widgetFunctions.getTranslations(value);
       }
       widgetFunctions.updateWidgetElement(index, key, value, ticker);
+    },
+    updateWidgetTranslations: function(lang, data){
+      widgetDefaults.translations[lang] = data;
+      for (var x = 0; x < widgetsStates.length; x++){
+        var isNoTranslationLabelsUpdate = widgetsStates[x].noTranslationLabels.length > 0 && lang === 'en';
+        if (widgetsStates[x].language === lang || isNoTranslationLabelsUpdate){
+          var mainElement = widgetsStates[x].mainElement;
+          var transalteElements = Array.prototype.slice.call(mainElement.querySelectorAll('.cp-translation'));
+          for (var y = 0; y < transalteElements.length; y++){
+            transalteElements[y].classList.forEach(function(className){
+              if (className.search('translation_') > -1){
+                var translateKey = className.replace('translation_', '');
+                if (translateKey === 'message') translateKey = widgetsStates[x].message;
+                var labelIndex = widgetsStates[x].noTranslationLabels.indexOf(translateKey);
+                var text = widgetFunctions.getTranslation(x, translateKey);
+                if (labelIndex > -1 && text){
+                  widgetsStates[x].noTranslationLabels.splice(labelIndex, 1)
+                }
+                transalteElements[y].innerText = text;
+                if (transalteElements[y].closest('.cp-widget__footer')){
+                  setTimeout(widgetFunctions.setBeforeElementInFooter.bind(null, x), 50);
+                }
+              }
+            })
+          }
+        }
+      }
     },
     updateTicker: function(index, data){
       var dataKeys = Object.keys(data);
@@ -269,15 +312,15 @@
         '<span class="primaryCurrency">'+ data.primary_currency + ' </span>' +
         '<span class="price_change_24hTicker cp-widget__rank cp-widget__rank-'+ ((data.ticker.price_change_24h > 0) ? "up" : ((data.ticker.price_change_24h < 0) ? "down" : "neutral")) +'">('+ (widgetFunctions.roundAmount(data.ticker.price_change_24h, 2) || data.emptyValue) +'%)</span>' +
         '</strong>' +
-        '<span class="cp-widget__rank-label">'+widgetFunctions.getTranslation(index, "rank")+' <span class="rankTicker">'+ (data.ticker.rank || data.emptyData) +'</span></span>';
+        '<span class="cp-widget__rank-label"><span class="cp-translation translation_rank">'+widgetFunctions.getTranslation(index, "rank")+'</span> <span class="rankTicker">'+ (data.ticker.rank || data.emptyData) +'</span></span>';
     },
     widgetMainElementMessage: function(index){
       var message = widgetsStates[index].message;
-      return '<div class="cp-widget__main-no-data">'+ (message) +'</div>';
+      return '<div class="cp-widget__main-no-data cp-translation translation_message">'+ (widgetFunctions.getTranslation(index, message)) +'</div>';
     },
     widgetAthElement: function(index){
       return '<div>' +
-        '<small>'+widgetFunctions.getTranslation(index, "ath")+'</small>' +
+        '<small class="cp-translation translation_ath">'+widgetFunctions.getTranslation(index, "ath")+'</small>' +
         '<div>' +
         '<span class="price_athTicker parseNumber">'+ widgetsStates[0].emptyData + ' </span>' +
         '<span class="symbolTicker showDetailsCurrency"></span>' +
@@ -287,7 +330,7 @@
     },
     widgetVolume24hElement: function(index){
       return '<div>' +
-        '<small>'+widgetFunctions.getTranslation(index, "volume_24h")+'</small>' +
+        '<small class="cp-translation translation_volume_24h">'+widgetFunctions.getTranslation(index, "volume_24h")+'</small>' +
         '<div>' +
         '<span class="volume_24hTicker parseNumber">'+ widgetsStates[0].emptyData + ' </span>' +
         '<span class="symbolTicker showDetailsCurrency"></span>' +
@@ -297,7 +340,7 @@
     },
     widgetMarketCapElement: function(index){
       return '<div>' +
-        '<small>'+widgetFunctions.getTranslation(index, "market_cap")+'</small>' +
+        '<small class="cp-translation translation_market_cap">'+widgetFunctions.getTranslation(index, "market_cap")+'</small>' +
         '<div>' +
         '<span class="market_capTicker parseNumber">'+ widgetsStates[0].emptyData + ' </span>' +
         '<span class="symbolTicker showDetailsCurrency"></span>' +
@@ -307,8 +350,8 @@
     },
     widgetFooter: function(index){
       var currency = widgetsStates[index].currency;
-      return '<p class="cp-widget__footer">' +
-        '<span>'+widgetFunctions.getTranslation(index, "powered_by") + ' </span>' +
+      return '<p class="cp-widget__footer cp-widget__footer--'+index+'">' +
+        '<span class="cp-translation translation_powered_by">'+widgetFunctions.getTranslation(index, "powered_by") + ' </span>' +
         '<img style="width: 16px" src="'+ widgetFunctions.main_logo_link() +'" alt=""/>' +
         '<a target="_blank" href="'+ widgetFunctions.coin_link(currency) +'">coinpaprika.com</a>' +
         '</p>'
@@ -341,7 +384,19 @@
       return document.querySelector('script[data-cp-currency-widget]');
     },
     getTranslation: function(index, label){
-      return widgetDefaults.translations[widgetsStates[index].language][label];
+      var text = widgetDefaults.translations[widgetsStates[index].language][label];
+      if (!text) {
+        text = widgetDefaults.translations['en'][label];
+      }
+      if (!text) {
+        return widgetFunctions.addLabelWithoutTranslation(index, label);
+      } else {
+        return text;
+      }
+    },
+    addLabelWithoutTranslation: function(index, label){
+      if (!widgetDefaults.translations['en']) widgetFunctions.getTranslations('en');
+      return widgetsStates[index].noTranslationLabels.push(label);
     },
     getTranslations: function(lang){
       if (!widgetDefaults.translations[lang]){
@@ -350,7 +405,7 @@
         xhr.open('GET', url + '/' + lang + '.json');
         xhr.onload = function() {
           if (xhr.status === 200) {
-            widgetDefaults.translations[lang] = JSON.parse(xhr.responseText);
+            widgetFunctions.updateWidgetTranslations(lang, JSON.parse(xhr.responseText));
           }
           else {
             widgetFunctions.onErrorRequest(0, xhr);
