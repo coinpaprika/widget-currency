@@ -6,18 +6,19 @@
 
 ### Parameters: 
 
-##### In div element: "data-/parameter/"
+#### In div element: data-/parameter/="/value/"
 example:
 ```html
 <div class="coinpaprika-currency-widget" 
-         data-primary-currency="USD" 
-         data-currency="btc-bitcoin" 
-         data-version="extended" 
-         data-update-active="false" 
-         data-update-timeout="30s"></div>
+     data-primary-currency="USD" 
+     data-currency="btc-bitcoin" 
+     data-version="extended" 
+     data-update-active="false" 
+     data-update-timeout="30s"></div>
 ```
 
-##### In script element: "data-cp-currency-widget='{ "/parameter/": /value/ }'"
+#### In script element: "data-cp-currency-widget='{ "/parameter/": /value/ }'"
+##### this parameters is set to all widgets on page
 example:
 ```html
 <div class="coinpaprika-currency-widget"></div>
@@ -84,7 +85,7 @@ default: null
 default: null
 ```
 
-**img-src** - custom link to lang folder
+**lang-src** - custom link to lang folder
 ```text
 default: null
 ```
