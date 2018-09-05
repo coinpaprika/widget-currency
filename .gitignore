@@ -1,4 +1,4 @@
 /node-modules
-/dist
 /bower-packages
 ./idea
+package-lock.json
