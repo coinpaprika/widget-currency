@@ -10,7 +10,7 @@
     style_src: null,
     img_src: null,
     lang_src: null,
-    origin_src: 'https://cdn.jsdelivr.net/npm/@coinpaprika/widget-currency@1.0.4',
+    origin_src: 'https://cdn.jsdelivr.net/npm/@coinpaprika/widget-currency@1.0.5',
     show_details_currency: false,
     emptyData: '-',
     emptyValue: 0,
