@@ -10,7 +10,7 @@
     style_src: null,
     img_src: null,
     lang_src: null,
-    origin_src: 'https://cdn.jsdelivr.net/npm/@coinpaprika/widget-currency@1.0.5',
+    origin_src: 'https://cdn.jsdelivr.net/npm/@coinpaprika/widget-currency@1.0.6',
     show_details_currency: false,
     emptyData: '-',
     emptyValue: 0,
@@ -379,7 +379,7 @@
       return document.querySelector('script[data-cp-currency-widget]');
     },
     getTranslation: function(index, label){
-      var text = widgetDefaults.translations[widgetsStates[index].language][label];
+      var text = (widgetDefaults.translations[widgetsStates[index].language]) ? widgetDefaults.translations[widgetsStates[index].language][label] : null;
       if (!text && widgetDefaults.translations['en']) {
         text = widgetDefaults.translations['en'][label];
       }
@@ -404,11 +404,13 @@
           }
           else {
             widgetFunctions.onErrorRequest(0, xhr);
+            widgetFunctions.getTranslations('en');
             delete widgetDefaults.translations[lang];
           }
         };
         xhr.onerror = function(){
           widgetFunctions.onErrorRequest(0, xhr);
+          widgetFunctions.getTranslations('en');
           delete widgetDefaults.translations[lang];
         };
         xhr.send();
