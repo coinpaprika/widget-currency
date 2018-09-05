@@ -10,7 +10,7 @@
     style_src: null,
     img_src: null,
     lang_src: null,
-    cdn_src: 'https://cdn.jsdelivr.net/npm/@coinpaprika/widget-currency',
+    origin_src: 'https://cdn.jsdelivr.net/npm/@coinpaprika/widget-currency@1.0.4',
     show_details_currency: false,
     emptyData: '-',
     emptyValue: 0,
@@ -30,7 +30,6 @@
     interval: null,
     isData: false,
     message: 'data_loading',
-    origin_src: null,
     translations: {},
     mainElement: null,
     noTranslationLabels: [],
@@ -44,10 +43,6 @@
       widgetFunctions.setOriginLink(index);
     },
     setOriginLink: function(index){
-      var data = widgetsStates[index];
-      if (!data.origin_src){
-        widgetDefaults.origin_src = data.cdn_src;
-      }
       if (Object.keys(widgetDefaults.translations).length === 0) widgetFunctions.getTranslations(widgetDefaults.language);
       widgetFunctions.stylesheet();
       setTimeout(function(){
@@ -385,7 +380,7 @@
     },
     getTranslation: function(index, label){
       var text = widgetDefaults.translations[widgetsStates[index].language][label];
-      if (!text) {
+      if (!text && widgetDefaults.translations['en']) {
         text = widgetDefaults.translations['en'][label];
       }
       if (!text) {
