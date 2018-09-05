@@ -62,7 +62,7 @@ Enable styling for dark backgrounds by adding `cp-widget__night-mode` class to w
      data-version="extended" 
      data-update-active="false" 
      data-update-timeout="30s"></div>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/coinpaprika/widget-currency/src/widget.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@coinpaprika/widget-currency/dist/widget.min.js"></script>
 ```
 
 ### Via npm
@@ -78,7 +78,7 @@ Then add this to your HTML, replacing data parameters
      data-version="extended" 
      data-update-active="false" 
      data-update-timeout="30s"></div>
-<script src="../node_modules/coinpaprika-widget-currency/dist/widget.js"></script>
+<script src="../node_modules/@coinpaprika/widget-currency/dist/widget.min.js"></script>
 ```
 
 ### Via bower
@@ -94,7 +94,7 @@ Then add this to your HTML, replacing data parameters
      data-version="extended" 
      data-update-active="false" 
      data-update-timeout="30s"></div>
-<script src="../bower_components/coinpaprika-widget-currency/dist/widget.js"></script>
+<script src="../bower_components/coinpaprika-widget-currency/dist/widget.min.js"></script>
 ```
 
 ### Using multiple widgets in same page
@@ -105,5 +105,5 @@ Then add this to your HTML, replacing data parameters
      data-currency="xrp-xrp" 
      data-version="standard" 
      data-update-active="true"></div>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/coinpaprika/widget-currency/src/widget.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@coinpaprika/widget-currency/dist/widget.min.js"></script>
 ```

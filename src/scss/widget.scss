@@ -6,8 +6,7 @@
   font-style: normal;
 }
 
-#coinpaprika-currency-widget-2546354,
-.coinpaprika-currency-widget-2546354 {
+.coinpaprika-currency-widget {
   border: 1px solid #f0f0f0;
   border-bottom-color: transparent;
   margin-bottom: 20px;
@@ -183,7 +182,7 @@
     }
   }
 
-  &.night-mode-2546354 {
+  &.cp-widget__night-mode {
     border-color: #505050;
     border-bottom-color: transparent;
 

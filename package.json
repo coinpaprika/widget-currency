@@ -1,14 +1,21 @@
 {
-  "name": "coinpaprika-widget-currency",
-  "version": "1.0.0",
+  "name": "@coinpaprika/widget-currency",
+  "version": "1.0.1",
   "description": "A widget showing cryptocurrency stats that you can easily embed in your portfolio website.",
-  "main": "widget.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "main": "src/widget.js",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/coinpaprika/widget-currency/"
+  },
+  "scripts": {
+    "build": "rm -r dist/* && npm run browserify && npm run uglify && npm run scss && npm run copy",
+    "browserify": "browserify src/widget.js --debug > dist/widget.js",
+    "uglify": "uglifyjs dist/widget.js --comments=/^[!]/ -mco dist/widget.min.js",
+    "scss": "sass-pack -o dist -s src/scss -q --minify=compressed",
+    "copy": "npm run copy-lang && npm run copy-img",
+    "copy-lang": "copyfiles './src/lang/*' -f ./dist/lang/ && echo 'Lang files copied.'",
+    "copy-img": "copyfiles './src/img/*' -f ./dist/img/ && echo 'Img files copied.'",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "coinpaprika",
@@ -22,5 +29,11 @@
   "bugs": {
     "url": "https://github.com/coinpaprika/widget-currency/issues"
   },
-  "homepage": "https://coinpaprika.com"
+  "homepage": "https://coinpaprika.com",
+  "dependencies": {
+    "browserify": "^16.2.2",
+    "copyfiles": "^2.1.0",
+    "sass-pack": "^2.2.0",
+    "uglify-js": "^3.4.9"
+  }
 }
