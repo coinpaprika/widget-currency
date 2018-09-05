@@ -1,7 +1,7 @@
 {
   "name": "coinpaprika-widget-currency",
-  "description": "A widget showing cryptocurrency stats that you can easily embed in your portfolio website.",
-  "main": "widget.js",
+  "description": "A widget showing cryptocurrency stats that you can easily embed in your website.",
+  "main": "src/widget.js",
   "authors": [
     "Coinpaprika <contact@coinpaprika.com> (https://coinpaprika.com/)"
   ],
@@ -18,11 +18,8 @@
     "globals"
   ],
   "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
+    "/node-modules",
+    "/bower_components"
   ],
   "dependencies": {}
 }

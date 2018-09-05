@@ -1,19 +1,17 @@
 (function(){
   var widgetsStates = [];
   var widgetDefaults = {
+    currency: 'btc-bitcoin',
+    primary_currency: 'USD',
     version: 'extended',
-    primaryCurrency: 'USD',
-    currencyId: 'btc-bitcoin',
-    mainElement: null,
-    updateActive: false,
-    updateTimeout: '30s',
-    showDetailsCurrency: false,
+    update_active: false,
+    update_timeout: '30s',
     language: 'en',
-    node_modules_src: null,
-    bower_src: null,
     style_src: null,
-    logo_src: null,
+    img_src: null,
+    lang_src: null,
     cdn_src: 'https://cdn.jsdelivr.net/npm/@coinpaprika/widget-currency',
+    show_details_currency: false,
     emptyData: '-',
     emptyValue: 0,
     ticker: {
@@ -34,6 +32,7 @@
     message: 'Data is loading...',
     origin_src: null,
     translations: {},
+    mainElement: null,
   };
   var widgetFunctions = {
     init: function(index){
@@ -45,24 +44,22 @@
     },
     setOriginLink: function(index){
       var data = widgetsStates[index];
-      console.log(data);
-      if (data.node_modules_src){
-        widgetDefaults.origin_src = data.node_modules_src;
-      } else if (data.bower_src){
-        widgetDefaults.origin_src = data.bower_src;
-      } else {
+      if (!data.origin_src){
         widgetDefaults.origin_src = data.cdn_src;
       }
+      if (Object.keys(widgetDefaults.translations).length === 0) widgetFunctions.getTranslations(widgetDefaults.language);
       widgetFunctions.stylesheet();
-      widgetFunctions.addWidgetElement(index);
-      widgetFunctions.initInterval(index);
+      setTimeout(function(){
+        widgetFunctions.addWidgetElement(index);
+        widgetFunctions.initInterval(index);
+      }, 100);
     },
     getMainElement: function(index){
       return widgetsStates[index].mainElement;
     },
     getData: function(index){
       var xhr = new XMLHttpRequest();
-      xhr.open('GET', 'https://api.coinpaprika.com/v1/widget/'+widgetsStates[index].currencyId+'?quote='+widgetsStates[index].primaryCurrency);
+      xhr.open('GET', 'https://api.coinpaprika.com/v1/widget/'+widgetsStates[index].currency+'?quote='+widgetsStates[index].primary_currency);
       xhr.onload = function() {
         if (xhr.status === 200) {
           if (!widgetsStates[index].isData) widgetFunctions.updateData(index, 'isData', true);
@@ -84,15 +81,15 @@
     },
     initInterval: function(index){
       clearInterval(widgetsStates[index].interval);
-      if (widgetsStates[index].updateActive && widgetsStates[index].updateTimeout > 1000){
+      if (widgetsStates[index].update_active && widgetsStates[index].update_timeout > 1000){
         widgetsStates[index].interval = setInterval(function(){
           widgetFunctions.getData(index);
-        }, widgetsStates[index].updateTimeout);
+        }, widgetsStates[index].update_timeout);
       }
     },
     addWidgetElement: function(index){
       var mainElement = widgetFunctions.getMainElement(index);
-      var details = (widgetsStates[index].version === 'extended') ? '<div class="cp-widget__details">' + widgetFunctions.widgetAthElement() + widgetFunctions.widgetVolume24hElement() + widgetFunctions.widgetMarketCapElement() + '</div>' : '';
+      var details = (widgetsStates[index].version === 'extended') ? '<div class="cp-widget__details">' + widgetFunctions.widgetAthElement(index) + widgetFunctions.widgetVolume24hElement(index) + widgetFunctions.widgetMarketCapElement(index) + '</div>' : '';
       var widgetElement = widgetFunctions.widgetMainElement(index) + details + widgetFunctions.widgetFooter(index);
       mainElement.innerHTML = widgetElement;
       widgetFunctions.getData(index);
@@ -101,17 +98,18 @@
       var mainElement = widgetFunctions.getMainElement(index);
       if (mainElement.dataset){
         if (mainElement.dataset.version) widgetFunctions.updateData(index, 'version', mainElement.dataset.version);
-        if (mainElement.dataset.primaryCurrency) widgetFunctions.updateData(index, 'primaryCurrency', mainElement.dataset.primaryCurrency);
-        if (mainElement.dataset.currency) widgetFunctions.updateData(index, 'currencyId', mainElement.dataset.currency);
-        if (mainElement.dataset.showDetailsCurrency) widgetFunctions.updateData(index, 'showDetailsCurrency', (mainElement.dataset.showDetailsCurrency === 'true'));
-        if (mainElement.dataset.updateActive) widgetFunctions.updateData(index, 'updateActive', (mainElement.dataset.updateActive === 'true'));
-        if (mainElement.dataset.updateTimeout) widgetFunctions.updateData(index, 'updateTimeout', widgetFunctions.parseIntervalValue(mainElement.dataset.updateTimeout));
+        if (mainElement.dataset.primaryCurrency) widgetFunctions.updateData(index, 'primary_currency', mainElement.dataset.primaryCurrency);
+        if (mainElement.dataset.currency) widgetFunctions.updateData(index, 'currency', mainElement.dataset.currency);
+        if (mainElement.dataset.showDetailsCurrency) widgetFunctions.updateData(index, 'show_details_currency', (mainElement.dataset.showDetailsCurrency === 'true'));
+        if (mainElement.dataset.updateActive) widgetFunctions.updateData(index, 'update_active', (mainElement.dataset.updateActive === 'true'));
+        if (mainElement.dataset.updateTimeout) widgetFunctions.updateData(index, 'update_timeout', widgetFunctions.parseIntervalValue(mainElement.dataset.updateTimeout));
         if (mainElement.dataset.language) widgetFunctions.updateData(index, 'language', mainElement.dataset.language);
+        if (mainElement.dataset.originSrc) widgetFunctions.updateData(index, 'origin_src', mainElement.dataset.originSrc);
         if (mainElement.dataset.nodeModulesSrc) widgetFunctions.updateData(index, 'node_modules_src', mainElement.dataset.nodeModulesSrc);
         if (mainElement.dataset.bowerSrc) widgetFunctions.updateData(index, 'bower_src', mainElement.dataset.bowerSrc);
         if (mainElement.dataset.styleSrc) widgetFunctions.updateData(index, 'style_src', mainElement.dataset.styleSrc);
-        if (mainElement.dataset.logoSrc) widgetFunctions.updateData(index, 'logo_src', mainElement.dataset.logoSrc);
-        if (mainElement.dataset.showDetailsCurrency) widgetFunctions.updateData(index, 'showDetailsCurrency', mainElement.dataset.showDetailsCurrency);
+        if (mainElement.dataset.langSrc) widgetFunctions.updateData(index, 'logo_src', mainElement.dataset.langSrc);
+        if (mainElement.dataset.imgSrc) widgetFunctions.updateData(index, 'logo_src', mainElement.dataset.imgSrc);
       }
     },
     updateWidgetElement: function(index, key, value, ticker){
@@ -119,8 +117,8 @@
       var mainElement = widgetFunctions.getMainElement(index);
       if (mainElement){
         var tickerClass = (ticker) ? 'Ticker' : '';
-        if (key === 'name' || key === 'currencyId'){
-          if (key === 'currencyId'){
+        if (key === 'name' || key === 'currency'){
+          if (key === 'currency'){
             var aElements = mainElement.querySelectorAll('.cp-widget__footer > a');
             for(var k = 0; k < aElements.length; k++) {
               aElements[k].href = widgetFunctions.coin_link(value);
@@ -149,7 +147,7 @@
                 value = (key === 'price_change_24h') ? '('+widgetFunctions.roundAmount(value, 2)+'%)': widgetFunctions.roundAmount(value, 2)+'%';
               }
             }
-            if (updateElement.classList.contains('showDetailsCurrency') && !state.showDetailsCurrency) {
+            if (updateElement.classList.contains('showDetailsCurrency') && !state.show_details_currency) {
               value = ' ';
             }
             if (updateElement.classList.contains('parseNumber')){
@@ -166,6 +164,9 @@
         widgetsStates[index].ticker[key] = value;
       } else {
         widgetsStates[index][key] = value;
+      }
+      if (key === 'language'){
+        widgetFunctions.getTranslations(value);
       }
       widgetFunctions.updateWidgetElement(index, key, value, ticker);
     },
@@ -249,7 +250,7 @@
     widgetMainElement: function(index){
       var data = widgetsStates[index];
       return '<div class="cp-widget__header">' +
-        '<div class="'+'cp-widget__img cp-widget__img-'+data.currencyId+'">' +
+        '<div class="'+'cp-widget__img cp-widget__img-'+data.currency+'">' +
         '<img/>' +
         '</div>' +
         '<div class="cp-widget__main">' +
@@ -259,24 +260,24 @@
     },
     widgetMainElementData: function(index){
       var data = widgetsStates[index];
-      return '<h3><a href="'+ widgetFunctions.coin_link(data.currencyId) +'">' +
+      return '<h3><a href="'+ widgetFunctions.coin_link(data.currency) +'">' +
         '<span class="nameTicker">'+ (data.ticker.name || data.emptyData) +'</span>' +
         '<span class="symbolTicker">'+ (data.ticker.symbol || data.emptyData) +'</span>' +
         '</a></h3>' +
         '<strong>' +
         '<span class="priceTicker parseNumber">'+ (widgetFunctions.parseNumber(data.ticker.price) || data.emptyData) + '</span> ' +
-        '<span class="primaryCurrency">'+ data.primaryCurrency + ' </span>' +
+        '<span class="primaryCurrency">'+ data.primary_currency + ' </span>' +
         '<span class="price_change_24hTicker cp-widget__rank cp-widget__rank-'+ ((data.ticker.price_change_24h > 0) ? "up" : ((data.ticker.price_change_24h < 0) ? "down" : "neutral")) +'">('+ (widgetFunctions.roundAmount(data.ticker.price_change_24h, 2) || data.emptyValue) +'%)</span>' +
         '</strong>' +
-        '<span class="cp-widget__rank-label">Rank <span class="rankTicker">'+ (data.ticker.rank || data.emptyData) +'</span></span>';
+        '<span class="cp-widget__rank-label">'+widgetFunctions.getTranslation(index, "rank")+' <span class="rankTicker">'+ (data.ticker.rank || data.emptyData) +'</span></span>';
     },
     widgetMainElementMessage: function(index){
       var message = widgetsStates[index].message;
       return '<div class="cp-widget__main-no-data">'+ (message) +'</div>';
     },
-    widgetAthElement: function(){
+    widgetAthElement: function(index){
       return '<div>' +
-        '<small>ATH</small>' +
+        '<small>'+widgetFunctions.getTranslation(index, "ath")+'</small>' +
         '<div>' +
         '<span class="price_athTicker parseNumber">'+ widgetsStates[0].emptyData + ' </span>' +
         '<span class="symbolTicker showDetailsCurrency"></span>' +
@@ -284,9 +285,9 @@
         '<span class="percent_from_price_athTicker cp-widget__rank">'+ widgetsStates[0].emptyData + '</span>' +
         '</div>'
     },
-    widgetVolume24hElement: function(){
+    widgetVolume24hElement: function(index){
       return '<div>' +
-        '<small>Volume 24h</small>' +
+        '<small>'+widgetFunctions.getTranslation(index, "volume_24h")+'</small>' +
         '<div>' +
         '<span class="volume_24hTicker parseNumber">'+ widgetsStates[0].emptyData + ' </span>' +
         '<span class="symbolTicker showDetailsCurrency"></span>' +
@@ -294,9 +295,9 @@
         '<span class="volume_24h_change_24hTicker cp-widget__rank">'+ widgetsStates[0].emptyData + '</span>' +
         '</div>';
     },
-    widgetMarketCapElement: function(){
+    widgetMarketCapElement: function(index){
       return '<div>' +
-        '<small>Market cap</small>' +
+        '<small>'+widgetFunctions.getTranslation(index, "market_cap")+'</small>' +
         '<div>' +
         '<span class="market_capTicker parseNumber">'+ widgetsStates[0].emptyData + ' </span>' +
         '<span class="symbolTicker showDetailsCurrency"></span>' +
@@ -305,11 +306,11 @@
         '</div>';
     },
     widgetFooter: function(index){
-      var currencyId = widgetsStates[index].currencyId;
+      var currency = widgetsStates[index].currency;
       return '<p class="cp-widget__footer">' +
-        'powered by ' +
+        '<span>'+widgetFunctions.getTranslation(index, "powered_by") + ' </span>' +
         '<img style="width: 16px" src="'+ widgetFunctions.main_logo_link() +'" alt=""/>' +
-        '<a target="_blank" href="'+ widgetFunctions.coin_link(currencyId) +'">coinpaprika.com</a>' +
+        '<a target="_blank" href="'+ widgetFunctions.coin_link(currency) +'">coinpaprika.com</a>' +
         '</p>'
     },
     getImage: function(index){
@@ -324,7 +325,7 @@
           img.src = this.src;
           imgContainer.classList.remove('cp-widget__img--hidden');
         };
-        newImg.src = widgetFunctions.img_src(data.currencyId);
+        newImg.src = widgetFunctions.img_src(data.currency);
       }
     },
     img_src: function(id){
@@ -334,10 +335,35 @@
       return 'https://coinpaprika.com/coin/'+ id
     },
     main_logo_link: function(){
-      return widgetDefaults.logo_src || widgetDefaults.origin_src +'/dist/img/logo_widget.svg'
+      return widgetDefaults.img_src || widgetDefaults.origin_src +'/dist/img/logo_widget.svg'
     },
     getScriptElement: function(){
       return document.querySelector('script[data-cp-currency-widget]');
+    },
+    getTranslation: function(index, label){
+      return widgetDefaults.translations[widgetsStates[index].language][label];
+    },
+    getTranslations: function(lang){
+      if (!widgetDefaults.translations[lang]){
+        var xhr = new XMLHttpRequest();
+        var url = widgetDefaults.lang_src  || widgetDefaults.origin_src + '/dist/lang';
+        xhr.open('GET', url + '/' + lang + '.json');
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            widgetDefaults.translations[lang] = JSON.parse(xhr.responseText);
+          }
+          else {
+            widgetFunctions.onErrorRequest(0, xhr);
+            delete widgetDefaults.translations[lang];
+          }
+        };
+        xhr.onerror = function(){
+          widgetFunctions.onErrorRequest(0, xhr);
+          delete widgetDefaults.translations[lang];
+        };
+        xhr.send();
+        widgetDefaults.translations[lang] = {};
+      }
     },
   };
   
@@ -360,7 +386,6 @@
         widgetsStates = [];
         for(var i = 0; i < mainElements.length; i++){
           var newSettings = JSON.parse(JSON.stringify(widgetDefaults));
-          console.log('widgetDefaults: ', widgetDefaults);
           newSettings.mainElement = mainElements[i];
           widgetsStates.push(newSettings);
           widgetFunctions.init(i);

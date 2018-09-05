@@ -5,6 +5,15 @@
 </head>
 <body>
 <div class="coinpaprika-currency-widget"></div>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@coinpaprika/widget-currency/dist/widget.min.js"></script>
+<div class="coinpaprika-currency-widget"
+     data-primary-currency="BTC"
+     data-language="en"
+     data-currency="eth-ethereum"></div>
+<script type="text/javascript"
+        data-cp-currency-widget='{
+            "language": "pl",
+            "origin-src": "."
+        }'
+        src="./src/widget.js"></script>
 </body>
 </html>

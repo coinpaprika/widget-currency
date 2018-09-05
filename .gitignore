@@ -1,4 +1,4 @@
 /node-modules
-/bower-packages
+/bower_components
 ./idea
 package-lock.json
