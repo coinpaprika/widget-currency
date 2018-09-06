@@ -10,7 +10,7 @@
     style_src: null,
     img_src: null,
     lang_src: null,
-    origin_src: 'https://cdn.jsdelivr.net/npm/@coinpaprika/widget-currency@1.0.6',
+    origin_src: 'https://cdn.jsdelivr.net/npm/@coinpaprika/widget-currency@1.0.7',
     show_details_currency: false,
     emptyData: '-',
     emptyValue: 0,
@@ -238,8 +238,8 @@
       if (!number && number !== 0) return number;
       if (number === widgetsStates[0].emptyValue || number === widgetsStates[0].emptyData) return number;
       number = parseFloat(number);
-      var numberStr = number.toString();
       if (number > 100000){
+        var numberStr = number.toFixed(0);
         var parameter = 'K',
           spliced = numberStr.slice(0, numberStr.length - 1);
         if (number > 1000000000){

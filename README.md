@@ -1,7 +1,6 @@
 # Coinpaprika Currency Widget
 <img src="https://i.imgur.com/Xwf3EKf.png" alt="" data-canonical-src="https://i.imgur.com/Xwf3EKf.png"/>
 
-
 ## How to use
 
 ### Parameters: 
@@ -72,7 +71,7 @@ default: 'en'
 
 **origin-src** - custom link to `/dist` directory
 ```text
-default: 'https://cdn.jsdelivr.net/npm/@coinpaprika/widget-currency@1.0.6'
+default: 'https://cdn.jsdelivr.net/npm/@coinpaprika/widget-currency@1.0.7'
 ```
 
 **style-src** - custom link to css file, if you don't want to fetch styles from js set as `false`
@@ -113,7 +112,7 @@ Enable styling for dark backgrounds by adding `cp-widget__night-mode` class to w
      data-version="extended" 
      data-update-active="false" 
      data-update-timeout="30s"></div>
-<script src="https://cdn.jsdelivr.net/npm/@coinpaprika/widget-currency@1.0.6/dist/widget.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@coinpaprika/widget-currency@1.0.7/dist/widget.min.js"></script>
 ```
 
 ### Via npm
@@ -152,5 +151,9 @@ Then add this to your HTML, replacing data parameters
      data-currency="xrp-xrp" 
      data-version="standard" 
      data-update-active="true"></div>
-<script src="https://cdn.jsdelivr.net/npm/@coinpaprika/widget-currency@1.0.6/dist/widget.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@coinpaprika/widget-currency@1.0.7/dist/widget.min.js"></script>
 ```
+
+## Live Demo
+
+[https://jsfiddle.net/xrz46ajs/10/](https://jsfiddle.net/xrz46ajs/10/)
