@@ -156,4 +156,4 @@ Then add this to your HTML, replacing data parameters
 
 ## Live Demo
 
-[https://jsfiddle.net/xrz46ajs/10/](https://jsfiddle.net/xrz46ajs/10/)
+[https://jsfiddle.net/xrz46ajs/15/](https://jsfiddle.net/xrz46ajs/15/)
