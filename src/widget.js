@@ -85,7 +85,7 @@ class widgetsClass {
       style_src: null,
       img_src: null,
       lang_src: null,
-      origin_src: 'https://cdn.jsdelivr.net/npm/@coinpaprika/widget-currency',
+      origin_src: 'https://unpkg.com/@coinpaprika/widget-currency',
       show_details_currency: false,
       ticker: {
         name: undefined,
