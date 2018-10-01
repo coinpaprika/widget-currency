@@ -5,6 +5,21 @@
   font-style: normal;
 }
 
+$black: #000000;
+$blue: #0645ad;
+$lightblue: #80a6e5;
+$darkgrey: #4c4c4c;
+$lightdarkgrey: #505050;
+$grey: #9a9a9a;
+$lightgrey: #dcdcdc;
+$superlightgrey: #f0f0f0;
+$red: #ca312c;
+$green: #43aa05;
+$night-mode-background: #252525;
+
+$img-size: 19px;
+$table-padding: 8px;
+
 .coinpaprika-currency-widget {
   border: 1px solid #f0f0f0;
   border-bottom-color: transparent;
@@ -28,10 +43,25 @@
 
   * {
     box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    box-shadow: none!important;
   }
 
   a {
     color: #063483;
+  }
+
+  button {
+    border: 0 solid transparent;
+    outline: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 1;
+    background: transparent;
+    font-weight: 100;
+    border-radius: 0;
   }
 
   .cp-widget {
@@ -115,8 +145,14 @@
     }
 
     &__chart {
-      border-top: 1px solid #f0f0f0;
-      padding: 15px 5px;
+      padding: 0 5px 15px;
+      position: relative;
+
+      .highcharts {
+        &-credits {
+          display: none;
+        }
+      }
     }
 
     &__footer {
@@ -160,6 +196,48 @@
         display: inline-block;
         width: 16px;
         vertical-align: middle;
+      }
+    }
+
+    &-select {
+      position: absolute;
+      top: 270px;
+      left: 15px;
+      display: block;
+      padding: 0 0 8px;
+
+      > label,
+      &__options {
+        float: left;
+        line-height: 1;
+      }
+
+      > label {
+        padding-right: 3px;
+        font-weight: 100;
+      }
+
+      &__options {
+        > span {
+          display: none;
+        }
+
+        > div {
+          > button {
+            float: left;
+            padding-left: 6px;
+            padding-right: 6px;
+            border-right: 1px solid grey;
+            color: $blue;
+
+            &:last-of-type {
+              border-right: 0px solid transparent;
+            }
+            &.cp-widget-active {
+              color: $darkgrey;
+            }
+          }
+        }
       }
     }
 
@@ -254,11 +332,32 @@
         }
       }
 
+      &-select {
+        label {
+          color: #ffffff;
+        }
+        &__options {
+          > div {
+            > button {
+              color: $lightblue;
+
+              &.cp-widget-active {
+                color: $grey;
+              }
+            }
+          }
+        }
+      }
+
     }
   }
 
   &__m {
     font-size: 10px;
+
+    button {
+      font-size: 10px;
+    }
 
     .cp-widget {
       &__header {
@@ -309,6 +408,86 @@
   }
 
   &__s {
+    .cp-widget {
+      &-select {
+        display: inline-block;
 
+        &__options {
+          > span {
+            display: inline-block;
+          }
+
+          > div {
+            display: none;
+          }
+        }
+
+        &:hover {
+          .cp-widget-select__dropdown {
+            display: block;
+            position: absolute;
+            right: 0;
+            top: 15px;
+            background: white;
+            z-index: 2;
+
+            > button {
+              width: 100%;
+              text-align: left;
+              padding: $table-padding+2px 2*$table-padding $table-padding+2px $table-padding;
+              border: 1px solid $lightgrey;
+              border-bottom: 1px solid transparent;
+
+              &.cp-widget-active {
+                padding-right: 15px;
+                position: relative;
+
+                &:before {
+                  content: '\2713';
+                  position: absolute;
+                  top: 50%;
+                  transform: translateY(-50%);
+                  right: 8px;
+                  font-size: 11px;
+                }
+              }
+
+              &:last-child {
+                border-bottom: 1px solid $lightgrey;
+              }
+
+              &:hover {
+                background: $lightgrey;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &.cp-widget__night-mode {
+      .cp-widget {
+        &-select {
+          &:hover {
+            .cp-widget-select__dropdown {
+              background: $night-mode-background;
+
+              > button {
+                border-color: $lightdarkgrey;
+                border-bottom-color: transparent;
+
+                &:last-child {
+                  border-bottom-color: $lightdarkgrey;
+                }
+
+                &:hover {
+                  background: $darkgrey;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

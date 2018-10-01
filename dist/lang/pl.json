@@ -4,6 +4,14 @@
   "volume_24h": "Wolumen 24h",
   "market_cap": "Kapitalizacja rynku",
   "powered_by": "wspierany przez",
+  "zoom_in": "Zakres: ",
+  "24h": "24h",
+  "7d": "7d",
+  "30d": "30d",
+  "1q": "1q",
+  "1y": "1y",
+  "ytd": "YTD",
+  "all": "ALL",
   "data_unavailable": "Dane są obecnie niedostępne",
   "data_loading": "Wczytywanie danych..."
 }
