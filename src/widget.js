@@ -120,8 +120,14 @@ class widgetsClass {
     if (!this.getMainElement(index)) {
       return console.error('Bind failed, no element with class = "' + this.defaults.className + '"');
     }
-    this.getDefaults(index);
-    this.setOriginLink(index);
+    let promise = Promise.resolve();
+    promise = promise.then(() => {
+      return this.getDefaults(index);
+    });
+    promise = promise.then(() => {
+      return this.setOriginLink(index);
+    });
+    return promise;
   }
   
   setWidgetClass(elements) {
@@ -143,33 +149,43 @@ class widgetsClass {
   }
   
   getDefaults(index) {
-    let mainElement = this.getMainElement(index);
-    if (mainElement && mainElement.dataset) {
-      if (!mainElement.dataset.modules && mainElement.dataset.version === 'extended') this.updateData(index, 'modules', ['market_details']);
-      if (!mainElement.dataset.modules && mainElement.dataset.version === 'standard') this.updateData(index, 'modules', []);
-      if (mainElement.dataset.modules) this.updateData(index, 'modules', JSON.parse(mainElement.dataset.modules));
-      if (mainElement.dataset.primaryCurrency) this.updateData(index, 'primary_currency', mainElement.dataset.primaryCurrency);
-      if (mainElement.dataset.currency) this.updateData(index, 'currency', mainElement.dataset.currency);
-      if (mainElement.dataset.showDetailsCurrency) this.updateData(index, 'show_details_currency', (mainElement.dataset.showDetailsCurrency === 'true'));
-      if (mainElement.dataset.updateActive) this.updateData(index, 'update_active', (mainElement.dataset.updateActive === 'true'));
-      if (mainElement.dataset.updateTimeout) this.updateData(index, 'update_timeout', cpBootstrap.parseIntervalValue(mainElement.dataset.updateTimeout));
-      if (mainElement.dataset.language) this.updateData(index, 'language', mainElement.dataset.language);
-      if (mainElement.dataset.originSrc) this.updateData(index, 'origin_src', mainElement.dataset.originSrc);
-      if (mainElement.dataset.nodeModulesSrc) this.updateData(index, 'node_modules_src', mainElement.dataset.nodeModulesSrc);
-      if (mainElement.dataset.bowerSrc) this.updateData(index, 'bower_src', mainElement.dataset.bowerSrc);
-      if (mainElement.dataset.styleSrc) this.updateData(index, 'style_src', mainElement.dataset.styleSrc);
-      if (mainElement.dataset.langSrc) this.updateData(index, 'logo_src', mainElement.dataset.langSrc);
-      if (mainElement.dataset.imgSrc) this.updateData(index, 'logo_src', mainElement.dataset.imgSrc);
-    }
+    return new Promise(resolve => {
+      let mainElement = this.getMainElement(index);
+      if (mainElement && mainElement.dataset) {
+        if (!mainElement.dataset.modules && mainElement.dataset.version === 'extended') this.updateData(index, 'modules', ['market_details']);
+        if (!mainElement.dataset.modules && mainElement.dataset.version === 'standard') this.updateData(index, 'modules', []);
+        if (mainElement.dataset.modules) this.updateData(index, 'modules', JSON.parse(mainElement.dataset.modules));
+        if (mainElement.dataset.primaryCurrency) this.updateData(index, 'primary_currency', mainElement.dataset.primaryCurrency);
+        if (mainElement.dataset.currency) this.updateData(index, 'currency', mainElement.dataset.currency);
+        if (mainElement.dataset.showDetailsCurrency) this.updateData(index, 'show_details_currency', (mainElement.dataset.showDetailsCurrency === 'true'));
+        if (mainElement.dataset.updateActive) this.updateData(index, 'update_active', (mainElement.dataset.updateActive === 'true'));
+        if (mainElement.dataset.updateTimeout) this.updateData(index, 'update_timeout', cpBootstrap.parseIntervalValue(mainElement.dataset.updateTimeout));
+        if (mainElement.dataset.language) this.updateData(index, 'language', mainElement.dataset.language);
+        if (mainElement.dataset.originSrc) this.updateData(index, 'origin_src', mainElement.dataset.originSrc);
+        if (mainElement.dataset.nodeModulesSrc) this.updateData(index, 'node_modules_src', mainElement.dataset.nodeModulesSrc);
+        if (mainElement.dataset.bowerSrc) this.updateData(index, 'bower_src', mainElement.dataset.bowerSrc);
+        if (mainElement.dataset.styleSrc) this.updateData(index, 'style_src', mainElement.dataset.styleSrc);
+        if (mainElement.dataset.langSrc) this.updateData(index, 'logo_src', mainElement.dataset.langSrc);
+        if (mainElement.dataset.imgSrc) this.updateData(index, 'logo_src', mainElement.dataset.imgSrc);
+        return resolve();
+      }
+      return resolve();
+    });
   }
   
   setOriginLink(index) {
     if (Object.keys(this.defaults.translations).length === 0) this.getTranslations(this.defaults.language);
-    this.stylesheet();
-    setTimeout(() => {
-      this.addWidgetElement(index);
-      this.initInterval(index);
-    }, 100);
+    let promise = Promise.resolve();
+    promise = promise.then(() => {
+      return this.stylesheet();
+    });
+    promise = promise.then(() => {
+      return this.addWidgetElement(index);
+    });
+    promise = promise.then(() => {
+      return this.initInterval(index);
+    });
+    return promise;
   }
   
   addWidgetElement(index) {
@@ -190,7 +206,6 @@ class widgetsClass {
     });
     promise = promise.then(() => {
       chartContainer = document.getElementById(`${ this.defaults.className }-price-chart-${ index }`);
-      console.log(chartContainer);
       return (chartContainer) ? chartContainer.parentElement.insertAdjacentHTML('beforeend', this.widgetSelectElement(index, 'range')) : null;
     });
     promise = promise.then(() => {
@@ -245,21 +260,15 @@ class widgetsClass {
   }
   
   getData(index) {
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', 'https://api.coinpaprika.com/v1/widget/' + this.states[index].currency + '?quote=' + this.states[index].primary_currency);
-    xhr.onload = () => {
-      if (xhr.status === 200) {
+    const url = 'https://api.coinpaprika.com/v1/widget/' + this.states[index].currency + '?quote=' + this.states[index].primary_currency;
+    return fetchService.fetchData(url).then((response) => {
+      return response.json().then(result => {
         if (!this.states[index].isData) this.updateData(index, 'isData', true);
-        this.updateTicker(index, JSON.parse(xhr.responseText));
-      }
-      else {
-        this.onErrorRequest(index, xhr);
-      }
-    };
-    xhr.onerror = () => {
-      this.onErrorRequest(index, xhr);
-    };
-    xhr.send();
+        this.updateTicker(index, result);
+      })
+    }).catch(error => {
+      return this.onErrorRequest(index, error);
+    });
   }
   
   onErrorRequest(index, xhr) {
@@ -394,11 +403,12 @@ class widgetsClass {
   stylesheet() {
     if (this.defaults.style_src !== false) {
       let url = this.defaults.style_src || this.defaults.origin_src + '/dist/' + this.defaults.cssFileName;
-      let link = document.createElement('link');
-      link.setAttribute('rel', 'stylesheet');
-      link.setAttribute('href', url);
-      return (document.body.querySelector('link[href="' + url + '"]')) ? '' : document.body.appendChild(link);
+      if (!document.body.querySelector('link[href="' + url + '"]')){
+        return fetchService.fetchStyle(url);
+      }
+      return Promise.resolve();
     }
+    return Promise.resolve();
   }
   
   widgetMainElement(index) {
@@ -664,7 +674,6 @@ class chartClass {
           volume: data.volume,
         }
       };
-      console.log({data, dataType, state, priceCurrency, newData});
       return Promise.resolve(newData);
     };
     this.isEventsHidden = false;
@@ -917,7 +926,6 @@ class chartClass {
       return this.parseOptions(this.options);
     });
     promise = promise.then((options) => {
-      console.log({options});
       return (window.Highcharts) ? Highcharts.stockChart(this.container.id, options, (chart) => this.bind(chart)) : null;
     });
     return promise;
@@ -1019,7 +1027,6 @@ class chartClass {
   
   setRangeSwitcher(){
     document.addEventListener(`${ this.id }-switch-range`, (event) => {
-      console.log(event);
       this.defaultRange = event.detail.data;
       return this.fetchDataPackage();
     });
@@ -1076,7 +1083,6 @@ class chartClass {
   }
   
   updateData(data, dataType) {
-    // console.log('-----------updateChartData', {data});
     let newData;
     let promise = Promise.resolve();
     promise = promise.then(() => {
@@ -1086,11 +1092,6 @@ class chartClass {
           return cpBootstrap.loop(Object.entries(data), (value) => {
             if (this.isExcluded(value[0])) return;
             let oldData = this.getOldData(dataType)[value[0]];
-            // console.log({oldData, value: value[0]});
-            // value[1] = value[1].map(element => {
-            //   element[2] = 'new';
-            //   return element;
-            // });
             newData[value[0]] = oldData
               .filter((element) => {
                 return value[1].findIndex(findElement => this.isTheSameElement(element, findElement, dataType)) === -1;
@@ -1112,8 +1113,6 @@ class chartClass {
       }
     });
     promise = promise.then(() => {
-      // console.log({newData});
-      // console.log();
       return this.replaceData(newData, dataType);
     });
     return promise;
@@ -1301,7 +1300,6 @@ class chartClass {
           xAxis: {
             events: {
               setExtremes: (e) => {
-                // console.log({e, xthis: this});
                 if ((e.trigger === 'navigator' || e.trigger === 'zoom') && e.min && e.max) {
                   document.dispatchEvent(new CustomEvent(this.id+'SetExtremes', {
                     detail: {
@@ -1395,7 +1393,6 @@ class chartClass {
     let chartContainer = document.getElementById(id);
     container.id = id + label;
     container.classList.add(className);
-    console.log('addContainer', {id, label, className, tagName, container, chartContainer});
     chartContainer.appendChild(container);
   }
   
@@ -1467,8 +1464,6 @@ class bootstrapClass {
   }
   
   updateObject(obj, newObj) {
-    // console.log({obj, newObj});
-    
     let result = obj;
     let promise = Promise.resolve();
     promise = promise.then(() => {
@@ -1482,7 +1477,6 @@ class bootstrapClass {
       });
     });
     promise = promise.then(() => {
-      // console.log({result});
       return result
     });
     return promise;
@@ -1572,9 +1566,28 @@ class fetchClass {
     });
   }
   
+  fetchStyle(url) {
+    if (this.state[url]) return Promise.resolve(null);
+    this.state[url] = 'pending';
+    return new Promise((resolve, reject) => {
+      const link = document.createElement('link');
+      link.setAttribute('rel', 'stylesheet');
+      document.body.appendChild(link);
+      link.setAttribute('href', url);
+      link.addEventListener('load', () => {
+        if (this.state) this.state[url] = 'downloaded';
+        resolve();
+      });
+      link.addEventListener('error', () => {
+        if (this.state) delete this.state[url];
+        reject(new Error(`Failed to load style URL: ${url}`));
+      });
+      link.href = url;
+    });
+  }
+  
   fetchChartData(uri, fromState = false){
     const url = 'https://graphs.coinpaprika.com' + uri;
-    console.log('fetchChartData', {url});
     return this.fetchData(url, fromState);
   }
   
