@@ -40,6 +40,7 @@ class widgetsController {
         return cpBootstrap.loop(mainElements, (element, index) => {
           let newSettings = JSON.parse(JSON.stringify(this.widgets.defaults));
           newSettings.isWordpress = element.classList.contains('wordpress');
+          newSettings.isNightMode = element.classList.contains('cp-widget__night-mode');
           newSettings.mainElement = element;
           this.widgets.states.push(newSettings);
           let promise = Promise.resolve();
@@ -48,7 +49,7 @@ class widgetsController {
               'http://code.highcharts.com/stock/highstock.js',
               'https://code.highcharts.com/modules/exporting.js',
               'https://code.highcharts.com/modules/no-data-to-display.js',
-              'https://code.highcharts.com/modules/offline-exporting.js',
+              'https://highcharts.github.io/pattern-fill/pattern-fill-v2.js',
             ];
             return (newSettings.modules.indexOf('chart') > -1 && !window.Highcharts)
               ? cpBootstrap.loop(chartScripts, link => {
@@ -101,6 +102,7 @@ class widgetsClass {
       },
       interval: null,
       isWordpress: false,
+      isNightMode: false,
       isData: false,
       message: 'data_loading',
       translations: {},
@@ -600,6 +602,7 @@ class chartClass {
   constructor(container, state){
     if (!container) return;
     this.id = container.id;
+    this.isNightMode = state.isNightMode;
     this.chartsWithActiveSeriesCookies = [];
     this.chart = null;
     this.currency = state.currency;
@@ -814,7 +817,7 @@ class chartClass {
         itemDistance: 40,
         itemStyle: {
           fontWeight: 'normal',
-          color: '#0645ad'
+          color: (this.isNightMode) ? '#80a6e5' : '#0645ad',
         },
         itemMarginTop: 8,
       },
@@ -823,13 +826,14 @@ class chartClass {
         shared: true,
         split: false,
         animation: false,
-        borderWidth: 0,
+        borderWidth: 1,
+        borderColor: (this.isNightMode) ? '#4c4c4c' : '#e3e3e3',
         hideDelay: 100,
         shadow: false,
         backgroundColor: '#ffffff',
         style: {
           color: '#4c4c4c',
-          fontSize: '10px'
+          fontSize: '10px',
         },
         useHTML: true,
         formatter: function(){
@@ -846,8 +850,8 @@ class chartClass {
       },
       
       xAxis: {
-        lineColor: '#505050',
-        tickColor: '#505050',
+        lineColor: (this.isNightMode) ? '#505050' : '#e3e3e3',
+        tickColor: (this.isNightMode) ? '#505050' : '#e3e3e3',
         tickLength: 7,
       },
       
@@ -865,7 +869,7 @@ class chartClass {
         showLastLabel: false,
         showFirstLabel: false,
       }, {
-        gridLineColor: '#505050',
+        gridLineColor: (this.isNightMode) ? '#505050' : '#e3e3e3',
         gridLineDashStyle: 'dash',
         lineWidth: 1,
         tickWidth: 1,
@@ -900,7 +904,7 @@ class chartClass {
           showInLegend: false,
         },
         {
-          color: '#838383' || `url(#fill-volume-chart)`,
+          color: `url(#fill-pattern${(this.isNightMode) ? '-night' : ''})`,
           name: 'Volume',
           id: 'volume',
           data: [],
@@ -1409,7 +1413,7 @@ class chartClass {
       defs: {
         patterns: [
           {
-            'id': 'fill-volume-chart',
+            'id': 'fill-pattern',
             'path': {
               d: 'M 3 0 L 3 10 M 8 0 L 8 10',
               stroke: "#e3e3e3",
@@ -1418,7 +1422,7 @@ class chartClass {
             },
           },
           {
-            'id': 'fill-volume-chart-night',
+            'id': 'fill-pattern-night',
             'path': {
               d: 'M 3 0 L 3 10 M 8 0 L 8 10',
               stroke: "#9b9b9b",

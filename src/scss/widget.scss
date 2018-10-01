@@ -31,6 +31,25 @@ $table-padding: 8px;
   max-width: 600px;
   margin: 0 auto 20px;
 
+  .arrow-down {
+    position: relative;
+    color: $blue;
+    padding-right: 13px;
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 0;
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 4px solid $blue;
+    }
+  }
+
   &.wordpress {
     border-bottom-color: #f0f0f0!important;
 
@@ -231,7 +250,7 @@ $table-padding: 8px;
             color: $blue;
 
             &:last-of-type {
-              border-right: 0px solid transparent;
+              border-right: 0 solid transparent;
             }
             &.cp-widget-active {
               color: $darkgrey;
@@ -283,6 +302,14 @@ $table-padding: 8px;
   &.cp-widget__night-mode {
     border-color: #505050;
     border-bottom-color: transparent;
+
+    .arrow-down {
+      color: $lightblue;
+
+      &:before {
+        border-top-color: $lightblue;
+      }
+    }
 
     &.wordpress {
       border-bottom-color: #505050!important;
