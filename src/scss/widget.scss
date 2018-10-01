@@ -379,6 +379,14 @@ $table-padding: 8px;
     }
   }
 
+  &__l {
+    .cp-widget {
+      &-select {
+        top: 235px;
+      }
+    }
+  }
+
   &__m {
     font-size: 10px;
 
@@ -512,6 +520,76 @@ $table-padding: 8px;
                 }
               }
             }
+          }
+        }
+      }
+    }
+  }
+
+  &__xs {
+
+    .cp-widget {
+      &__header {
+        .cp-widget {
+          &__img,
+          &__img > img {
+            width: 50px!important;
+            height: 50px!important;
+          }
+
+          &__main {
+            .nameTicker {
+              font-size: 18px;
+            }
+
+            .symbolTicker {
+              font-size: 12px;
+              margin-left: 7px;
+            }
+
+            strong {
+              font-size: 13px;
+            }
+          }
+
+          &__rank-label {
+            padding: 1px 4px;
+          }
+        }
+      }
+
+      &__details {
+        flex-direction: column;
+
+        > div {
+          width: 100%;
+          border-left: none;
+          border-bottom-width: 1px;
+          border-bottom-style: solid;
+          padding: 7px 15px;
+
+          &:last-child {
+            border-bottom: none;
+          }
+
+          small {
+            float: left;
+            width: 50%;
+          }
+
+          > div {
+            font-size: 12px;
+          }
+
+          [class*="cp-widget__rank"] {
+            font-size: 9px;
+          }
+
+          > div,
+          [class*="cp-widget__rank"] {
+            width: 50%;
+            float: right;
+            text-align: right;
           }
         }
       }

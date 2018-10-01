@@ -78,7 +78,7 @@ class widgetsClass {
       primary_currency: 'USD',
       range_list: ['24h', '7d', '30d', '1q', '1y', 'ytd', 'all'],
       range: '7d',
-      modules: ['chart', 'market_details'],
+      modules: ['market_details', 'chart'],
       update_active: false,
       update_timeout: '30s',
       language: 'en',
@@ -104,6 +104,7 @@ class widgetsClass {
       isWordpress: false,
       isNightMode: false,
       isData: false,
+      availableModules: ['price', 'chart', 'market_details'],
       message: 'data_loading',
       translations: {},
       mainElement: null,
@@ -114,6 +115,7 @@ class widgetsClass {
         xs: 280,
         s: 320,
         m: 370,
+        l: 462,
       },
     };
   }
@@ -193,10 +195,16 @@ class widgetsClass {
   addWidgetElement(index) {
     let mainElement = this.getMainElement(index);
     let modules = '';
+    let modulesArray = [];
     let chartContainer = null;
     let promise = Promise.resolve();
     promise = promise.then(() => {
-      return cpBootstrap.loop(this.states[index].modules, module => {
+      return cpBootstrap.loop(this.defaults.availableModules, module => {
+        return (this.states[index].modules.indexOf(module) > -1) ? modulesArray.push(module) : null;
+      });
+    });
+    promise = promise.then(() => {
+      return cpBootstrap.loop(modulesArray, module => {
         let label = null;
         if (module === 'chart') label = 'Chart';
         if (module === 'market_details') label = 'MarketDetails';
@@ -692,7 +700,7 @@ class chartClass {
         rules: [
           {
             condition: {
-              maxWidth: 768
+              maxWidth: 1500,
             },
             chartOptions: {
               legend: {
@@ -724,11 +732,11 @@ class chartClass {
           },
           {
             condition: {
-              maxWidth: 600
+              maxWidth: 600,
             },
             chartOptions: {
               chart: {
-                marginTop: 15,
+                marginTop: 0,
                 zoomType: "none",
                 marginLeft: 10,
                 marginRight: 10,
@@ -779,16 +787,70 @@ class chartClass {
           },
           {
             condition: {
-              maxWidth: 374
+              maxWidth: 450
             },
             chartOptions: {
+              legend: {
+                align: 'right',
+                verticalAlign: 'middle',
+                y: 82,
+                symbolRadius: 0,
+                itemDistance: 20,
+                itemStyle: {
+                  fontSize: 10
+                }
+              },
               navigator: {
-                margin: 90,
+                margin: 60,
                 height: 40,
                 handles: {
                   height: 20,
                 }
-              }
+              },
+              chart: {
+                height: 300,
+              },
+              yAxis: [
+                {
+                  floor: 0,
+                  tickAmount: 7,
+                  tickWidth: 0,
+                  tickLength: 0,
+                  lineWidth: 0,
+                  title: {
+                    enabled: false
+                  },
+                  labels: {
+                    align: "left",
+                    x: 1,
+                    y: -2,
+                    style: {
+                      color: '#9e9e9e',
+                      fontSize: '9px',
+                    },
+                  }
+                },
+                {
+                  floor: 0,
+                  tickAmount: 7,
+                  tickWidth: 0,
+                  tickLength: 0,
+                  lineWidth: 0,
+                  title: {
+                    enabled: false
+                  },
+                  labels: {
+                    align: "right",
+                    overflow: "justify",
+                    x: 1,
+                    y: -2,
+                    style: {
+                      color: '#5085ec',
+                      fontSize: '9px',
+                    },
+                  }
+                },
+              ],
             },
           }
         ]
@@ -1522,9 +1584,8 @@ class bootstrapClass {
     }
   }
   
-  round(amount, decimal, direction) {
+  round(amount, decimal = 8, direction) {
     amount = parseFloat(amount);
-    if (!decimal) decimal = 8;
     if (!direction) direction = 'round';
     decimal = Math.pow(10, decimal);
     return Math[direction](amount * decimal) / decimal;
