@@ -11,7 +11,7 @@ example:
 <div class="coinpaprika-currency-widget" 
      data-primary-currency="USD" 
      data-currency="btc-bitcoin" 
-     data-version="extended" 
+     data-modules='["chart", "market_details"]'  
      data-update-active="false" 
      data-update-timeout="30s"></div>
 ```
@@ -36,22 +36,30 @@ example:
 default: 'btc-bitcoin'
 ```
 
-**primary-currency** - the currency to which the values ​​will be converted possible options 'USD', 'BTC' and 'ETH'
+**primary-currency** - the currency to which the values ​​will be converted possible options 'USD', 'PLN', 'BTC' and 'ETH'
 ```text
 default: 'USD'
 ```
 
-**version** - 'standard' or 'extended'
+**modules** - 'market_details' and 'chart' (you can combine all modules)
 
-##### Standard widget:
-<img src="https://i.imgur.com/Og4f6sN.png" alt="" data-canonical-src="https://i.imgur.com/Og4f6sN.png" height="80" />
+##### Chart module:
+<img src="https://i.imgur.com/bAcjxIk.png" alt="" data-canonical-src="https://i.imgur.com/bAcjxIk.png" width="320" />
 
-##### Extended widget:
-<img src="https://i.imgur.com/7JGiq0b.png" alt="" data-canonical-src="https://i.imgur.com/7JGiq0b.png" height="148" />
+##### Market details module:
+<img src="https://i.imgur.com/LJyxE5u.png" alt="" data-canonical-src="https://i.imgur.com/LJyxE5u.png" width="320" />
+
+##### All modules:
+<img src="https://i.imgur.com/MVmyXeV.png" alt="" data-canonical-src="https://i.imgur.com/MVmyXeV.png" width="320" />
 
 ######
 ```text
-default: 'extended'
+default: ['market_details', 'chart']
+```
+
+**range** - initial chart range '24h', '7d', '30d', '1q', '1y', 'ytd', 'all'
+```text
+default: '7d'
 ```
 
 **update-active** - bool value is live data updates active
@@ -108,8 +116,7 @@ Enable styling for dark backgrounds by adding `cp-widget__night-mode` class to w
 ```html
 <div class="coinpaprika-currency-widget" 
      data-primary-currency="USD" 
-     data-currency="btc-bitcoin" 
-     data-version="extended" 
+     data-currency="btc-bitcoin"
      data-update-active="false" 
      data-update-timeout="30s"></div>
 <script src="https://cdn.jsdelivr.net/npm/@coinpaprika/widget-currency/dist/widget.min.js"></script>
@@ -156,4 +163,4 @@ Then add this to your HTML, replacing data parameters
 
 ## Live Demo
 
-[https://jsfiddle.net/xrz46ajs/16/](https://jsfiddle.net/xrz46ajs/16/)
+[https://jsfiddle.net/xrz46ajs](https://jsfiddle.net/xrz46ajs/18/)

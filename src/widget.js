@@ -161,6 +161,7 @@ class widgetsClass {
         if (mainElement.dataset.modules) this.updateData(index, 'modules', JSON.parse(mainElement.dataset.modules));
         if (mainElement.dataset.primaryCurrency) this.updateData(index, 'primary_currency', mainElement.dataset.primaryCurrency);
         if (mainElement.dataset.currency) this.updateData(index, 'currency', mainElement.dataset.currency);
+        if (mainElement.dataset.range) this.updateData(index, 'range', mainElement.dataset.range);
         if (mainElement.dataset.showDetailsCurrency) this.updateData(index, 'show_details_currency', (mainElement.dataset.showDetailsCurrency === 'true'));
         if (mainElement.dataset.updateActive) this.updateData(index, 'update_active', (mainElement.dataset.updateActive === 'true'));
         if (mainElement.dataset.updateTimeout) this.updateData(index, 'update_timeout', cpBootstrap.parseIntervalValue(mainElement.dataset.updateTimeout));
