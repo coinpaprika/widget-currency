@@ -173,10 +173,13 @@ $table-padding: 8px;
     &__chart {
       padding: 0 5px 15px;
       position: relative;
-      overflow: hidden;
 
-      .cp-chart-no-data {
-        height: 205px;
+      &.cp-chart-no-data {
+        overflow: hidden;
+
+        .highcharts-container {
+          height: 205px!important;
+        }
       }
 
       .highcharts {
@@ -398,8 +401,10 @@ $table-padding: 8px;
       }
 
       &__chart {
-        .cp-chart-no-data {
-          height: 185px;
+        &.cp-chart-no-data {
+          .highcharts-container {
+            height: 185px!important;
+          }
         }
       }
     }

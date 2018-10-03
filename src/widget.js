@@ -1101,7 +1101,6 @@ class chartClass {
   
   hideChart(bool = true){
     const classFunc = (bool) ? 'add' : 'remove';
-    console.log({container: this.container});
     const siblings = cpBootstrap.nodeListToArray(this.container.parentElement.childNodes);
     let promise = Promise.resolve();
     promise = promise.then(() => {
@@ -1111,7 +1110,7 @@ class chartClass {
       return cpBootstrap.loop(result, element => element.classList[classFunc]('cp-hidden'));
     });
     promise = promise.then(() => {
-      return this.container.classList[classFunc]('cp-chart-no-data');
+      return this.container.parentElement.classList[classFunc]('cp-chart-no-data');
     });
     return promise;
   }
