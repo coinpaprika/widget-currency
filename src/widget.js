@@ -677,20 +677,26 @@ class chartClass {
         ordinal: false
       }
     };
-    this.chartDataParser = (data, dataType) => {
-      let priceCurrency = state.primary_currency.toLowerCase();
-      data = data[0];
-      let newData = {
-        data: {
-          price: (data[priceCurrency]) ? data[priceCurrency] : [],
-          volume: data.volume,
-        }
-      };
-      return Promise.resolve(newData);
+    this.chartDataParser = (data) => {
+      return new Promise((resolve) => {
+        data = data[0];
+        const priceCurrency = state.primary_currency.toLowerCase();
+        return resolve({
+          data: {
+            price: (data.price)
+              ? data.price
+              : ((data[priceCurrency])
+                ? data[priceCurrency]
+                : []),
+            volume: data.volume || [],
+          }
+        });
+      });
     };
     this.isEventsHidden = false;
     this.excludeSeriesIds = [];
     this.asyncUrl = `/currency/data/${ state.currency }/_range_/`;
+    this.asyncParams = `?quote=${ state.primary_currency.toUpperCase() }&fields=price,volume`;
     this.init();
   }
   
@@ -1046,7 +1052,7 @@ class chartClass {
       return null;
     });
     promise = promise.then(() => {
-      let url = (isPreciseRange) ? this.getNavigatorExtremesUrl(minDate, maxDate) : this.asyncUrl.replace('_range_', this.getRange());
+      let url = ((isPreciseRange) ? this.getNavigatorExtremesUrl(minDate, maxDate) : this.asyncUrl.replace('_range_', this.getRange())) + this.asyncParams;
       return (url) ? this.fetchData(url, 'data', !isPreciseRange) : null;
     });
     promise = promise.then(() => {
@@ -1087,7 +1093,25 @@ class chartClass {
       });
     }).catch((error) => {
       this.chart.hideLoading();
+      this.hideChart();
       return console.log('Fetch Error', error);
+    });
+    return promise;
+  }
+  
+  hideChart(bool = true){
+    const classFunc = (bool) ? 'add' : 'remove';
+    console.log({container: this.container});
+    const siblings = cpBootstrap.nodeListToArray(this.container.parentElement.childNodes);
+    let promise = Promise.resolve();
+    promise = promise.then(() => {
+      return siblings.filter(element => element.id.search('chart') === -1);
+    });
+    promise = promise.then((result) => {
+      return cpBootstrap.loop(result, element => element.classList[classFunc]('cp-hidden'));
+    });
+    promise = promise.then(() => {
+      return this.container.classList[classFunc]('cp-chart-no-data');
     });
     return promise;
   }

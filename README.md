@@ -155,8 +155,7 @@ Then add this to your HTML, replacing data parameters
 ```html
 <div class="coinpaprika-currency-widget"></div>
 <div class="coinpaprika-currency-widget" 
-     data-currency="xrp-xrp" 
-     data-version="standard" 
+     data-currency="xrp-xrp"
      data-update-active="true"></div>
 <script src="https://unpkg.com/@coinpaprika/widget-currency/dist/widget.min.js"></script>
 ```
