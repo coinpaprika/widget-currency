@@ -62,10 +62,10 @@ class widgetsController {
           let promise = Promise.resolve();
           promise = promise.then(() => {
             let chartScripts = [
-              'http://code.highcharts.com/stock/highstock.js',
-              'https://code.highcharts.com/modules/exporting.js',
-              'https://code.highcharts.com/modules/no-data-to-display.js',
-              'https://highcharts.github.io/pattern-fill/pattern-fill-v2.js',
+              '//code.highcharts.com/stock/highstock.js',
+              '//code.highcharts.com/modules/exporting.js',
+              '//code.highcharts.com/modules/no-data-to-display.js',
+              '//highcharts.github.io/pattern-fill/pattern-fill-v2.js',
             ];
             return (newSettings.modules.indexOf('chart') > -1 && !window.Highcharts)
               ? cpBootstrap.loop(chartScripts, link => {
@@ -1731,4 +1731,5 @@ class fetchClass {
 new widgetsController();
 const cpBootstrap = new bootstrapClass();
 const fetchService = new fetchClass();
+
 },{}]},{},[1]);
