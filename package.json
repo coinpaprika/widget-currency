@@ -1,6 +1,6 @@
 {
   "name": "@coinpaprika/widget-currency",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "A widget showing cryptocurrency stats that you can easily embed in your website.",
   "main": "src/widget.js",
   "repository": {
@@ -15,9 +15,10 @@
     "scss": "sass-pack -o dist -s src/scss -q --minify=compressed",
     "watch-css": "nodemon -e scss -x npm run scss",
     "watch": "parallelshell \"npm run watch-css\" \"npm run watch-js\" -w -v",
-    "copy": "npm run copy-lang && npm run copy-img",
+    "copy": "npm run copy-lang && npm run copy-img && npm run copy-data",
     "copy-lang": "copyfiles './src/lang/*' -f ./dist/lang/ && echo 'Lang files copied.'",
     "copy-img": "copyfiles './src/img/*' -f ./dist/img/ && echo 'Img files copied.'",
+    "copy-data": "copyfiles './src/data/*' -f ./dist/data/ && echo 'Data files copied.'",
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "http-server -o -p 1332"
   },

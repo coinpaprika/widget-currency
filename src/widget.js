@@ -85,6 +85,7 @@ class widgetsClass {
       style_src: null,
       img_src: null,
       lang_src: null,
+      data_src: null,
       origin_src: 'https://unpkg.com/@coinpaprika/widget-currency',
       show_details_currency: false,
       ticker: {
@@ -355,7 +356,15 @@ class widgetsClass {
             value = ' ';
           }
           if (updateElement.classList.contains('parseNumber')) {
-            updateElement.innerText = cpBootstrap.parseNumber(value) || cpBootstrap.emptyData;
+            const origin = this.defaults.data_src || this.defaults.origin_src;
+            let promise = Promise.resolve();
+            promise = promise.then(() => {
+              return cpBootstrap.parseCurrencyNumber(value, state.primary_currency, origin);
+            });
+            promise = promise.then((result) => {
+              return updateElement.innerText = result || cpBootstrap.emptyData;
+            });
+            return promise;
           } else {
             updateElement.innerText = value || cpBootstrap.emptyData;
           }
@@ -583,26 +592,19 @@ class widgetsClass {
   
   getTranslations(lang) {
     if (!this.defaults.translations[lang]) {
-      let xhr = new XMLHttpRequest();
-      let url = this.defaults.lang_src || this.defaults.origin_src + '/dist/lang';
-      xhr.open('GET', url + '/' + lang + '.json');
-      xhr.onload = () => {
-        if (xhr.status === 200) {
-          this.updateWidgetTranslations(lang, JSON.parse(xhr.responseText));
+      const url = this.defaults.lang_src || this.defaults.origin_src + '/dist/lang/' + lang + '.json';
+      this.defaults.translations[lang] = {};
+      return fetchService.fetchJsonFile(url, true).then((response) => {
+        if (response) {
+          this.updateWidgetTranslations(lang, response);
         }
         else {
-          this.onErrorRequest(0, xhr);
+          this.onErrorRequest(0, url + response);
           this.getTranslations('en');
           delete this.defaults.translations[lang];
         }
-      };
-      xhr.onerror = () => {
-        this.onErrorRequest(0, xhr);
-        this.getTranslations('en');
-        delete this.defaults.translations[lang];
-      };
-      xhr.send();
-      this.defaults.translations[lang] = {};
+      });
+      
     }
   }
 }
@@ -1295,7 +1297,7 @@ class chartClass {
       content += '<tr>' +
         '<td>' +
         '<svg width="5" height="5"><rect x="0" y="0" width="5" height="5" fill="'+point.series.color+'" fill-opacity="1"></rect></svg>' +
-        point.series.name + ': ' + point.y.toLocaleString('ru-RU', { maximumFractionDigits: 8 }) + ' ' + ((point.series.name.toLowerCase().search(search.toLowerCase()) > -1) ? "" : label) +
+        point.series.name + ': ' + point.y.toLocaleString('ru-RU', { maximumFractionDigits: 8 }).replace(',', '.') + ' ' + ((point.series.name.toLowerCase().search(search.toLowerCase()) > -1) ? "" : label) +
         '</td>' +
         '</tr>';
     });
@@ -1553,6 +1555,19 @@ class bootstrapClass {
     return parseFloat(value.replace(timeSymbol, '')) * multiplier;
   }
   
+  isFiat(currency, origin){
+    if (!origin) Promise.resolve(false);
+    let promise = Promise.resolve();
+    promise = promise.then(() => {
+      let url = origin + '/dist/data/currencies.json';
+      return fetchService.fetchJsonFile(url, true);
+    });
+    promise = promise.then((result) => {
+      return (result[currency.toUpperCase()]);
+    });
+    return promise;
+  }
+  
   updateObject(obj, newObj) {
     let result = obj;
     let promise = Promise.resolve();
@@ -1572,7 +1587,18 @@ class bootstrapClass {
     return promise;
   }
   
-  parseNumber(number) {
+  parseCurrencyNumber(value, currency, origin){
+    let promise = Promise.resolve();
+    promise = promise.then(() => {
+      return this.isFiat(currency, origin);
+    });
+    promise = promise.then((result) => {
+      return (result) ? this.parseNumber(value, 2) : this.parseNumber(value);
+    });
+    return promise;
+  }
+  
+  parseNumber(number, precision) {
     if (!number && number !== 0) return number;
     if (number === this.emptyValue || number === this.emptyData) return number;
     number = parseFloat(number);
@@ -1593,24 +1619,25 @@ class bootstrapClass {
     } else {
       let isDecimal = (number % 1) > 0;
       if (isDecimal) {
-        let precision = 2;
-        if (number < 1) {
-          precision = 8;
-        } else if (number < 10) {
-          precision = 6;
-        } else if (number < 1000) {
-          precision = 4;
+        if (!precision){
+          precision = 2;
+          if (number < 1) {
+            precision = 8;
+          } else if (number < 10) {
+            precision = 6;
+          } else if (number < 1000) {
+            precision = 4;
+          }
         }
-        return this.round(number, precision);
+        return this.round(number, precision).toLocaleString('ru-RU', { maximumFractionDigits: precision }).replace(',', '.');
       } else {
-        return number.toFixed(2);
+        return number.toLocaleString('ru-RU', { minimumFractionDigits: 2 }).replace(',', '.');
       }
     }
   }
   
-  round(amount, decimal = 8, direction) {
+  round(amount, decimal = 8, direction = 'round') {
     amount = parseFloat(amount);
-    if (!direction) direction = 'round';
     decimal = Math.pow(10, decimal);
     return Math[direction](amount * decimal) / decimal;
   }
@@ -1680,7 +1707,7 @@ class fetchClass {
     return this.fetchData(url, fromState);
   }
   
-  fetchData(url, fromState){
+  fetchData(url, fromState = false){
     let promise = Promise.resolve();
     promise = promise.then(() => {
       if (fromState){
@@ -1696,9 +1723,9 @@ class fetchClass {
           return Promise.resolve(this.state[url].clone());
         }
       }
+      this.state[url] = 'pending';
       let promiseFetch = Promise.resolve();
       promiseFetch = promiseFetch.then(() => {
-        this.state[url] = 'pending';
         return fetch(url);
       });
       promiseFetch = promiseFetch.then((response) => {
@@ -1709,8 +1736,19 @@ class fetchClass {
     });
     return promise;
   }
+  
+  fetchJsonFile(url, fromState = false){
+    return this.fetchData(url, fromState).then(result => {
+      if (result.status === 200) {
+        return result.json();
+      }
+      return false;
+    }).catch(() => {
+      return false;
+    });
+  }
 }
 
-new widgetsController();
+const widgets = new widgetsController();
 const cpBootstrap = new bootstrapClass();
 const fetchService = new fetchClass();

@@ -121,6 +121,10 @@ $table-padding: 8px;
         margin-bottom: 2px;
         color: #333333;
       }
+
+      .priceTicker {
+        font-size: 23px;
+      }
     }
 
     &__main {
@@ -134,8 +138,10 @@ $table-padding: 8px;
       .cp-widget__main-no-data {
         height: 80px;
         font-size: 15px;
-        line-height: 80px;
+        line-height: 1.2;
         font-weight: 600;
+        display: flex;
+        align-items: center;
       }
     }
 
@@ -156,10 +162,13 @@ $table-padding: 8px;
           border-left: none;
         }
 
+        div {
+          font-weight: 600;
+        }
+
         small {
           display: block;
           margin-bottom: 5px;
-          color: #c4c4c4;
           font-size: 12px;
         }
 
