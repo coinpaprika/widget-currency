@@ -1619,7 +1619,7 @@ class bootstrapClass {
     } else {
       let isDecimal = (number % 1) > 0;
       if (isDecimal) {
-        if (!precision){
+        if (!precision || number < 0.01){
           precision = 2;
           if (number < 1) {
             precision = 8;
