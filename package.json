@@ -12,7 +12,7 @@
     "browserify": "browserify src/widget.js -o dist/widget.js -d -t [ babelify --presets [ es2015 ] ]",
     "watch-js": "watchify -p [ browserify-livereload --host 127.0.0.1 --port 1332 ] src/widget.js -o dist/widget.js -v",
     "uglify": "uglifyjs dist/widget.js --comments=/^[!]/ -mco dist/widget.min.js",
-    "scss": "sass-pack -o dist -s src/scss -q --minify=compressed",
+    "scss": "node-sass ./src/scss/widget.scss > ./dist/widget.min.css --output-style compressed",
     "watch-css": "nodemon -e scss -x npm run scss",
     "watch": "parallelshell \"npm run watch-css\" \"npm run watch-js\" -w -v",
     "copy": "npm run copy-lang && npm run copy-img && npm run copy-data",
@@ -43,9 +43,9 @@
     "browserify-livereload": "^1.0.10",
     "copyfiles": "^2.1.0",
     "http-server": "^0.11.1",
+    "node-sass": "^4.12.0",
     "nodemon": "^1.18.4",
     "parallelshell": "^3.0.2",
-    "sass-pack": "^2.2.1",
     "uglify-js": "^3.4.9",
     "watchify": "^3.11.0"
   }
