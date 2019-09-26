@@ -31,6 +31,20 @@ $table-padding: 8px;
   max-width: 600px;
   margin: 0 auto 20px;
 
+  .cp-chart-tooltip-currency {
+    font-size: 10px;
+
+    &__row {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    &__icon {
+      margin-right: 5px;
+    }
+  }
+
   .cp-hidden {
     display: none!important;
   }

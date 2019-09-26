@@ -1295,8 +1295,8 @@ class chartClass {
     let content = '';
     pointer.points.forEach(point => {
       content += '<tr>' +
-        '<td>' +
-        '<svg width="5" height="5"><rect x="0" y="0" width="5" height="5" fill="'+point.series.color+'" fill-opacity="1"></rect></svg>' +
+        '<td class="cp-chart-tooltip-currency__row">' +
+        '<svg class="cp-chart-tooltip-currency__icon" width="5" height="5"><rect x="0" y="0" width="5" height="5" fill="'+point.series.color+'" fill-opacity="1"></rect></svg>' +
         point.series.name + ': ' + point.y.toLocaleString('ru-RU', { maximumFractionDigits: 8 }).replace(',', '.') + ' ' + ((point.series.name.toLowerCase().search(search.toLowerCase()) > -1) ? "" : label) +
         '</td>' +
         '</tr>';
