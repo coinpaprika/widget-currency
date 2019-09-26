@@ -32,12 +32,15 @@ $table-padding: 8px;
   margin: 0 auto 20px;
 
   .cp-chart-tooltip-currency {
-    font-size: 10px;
+    small {
+      font-size: 10px;  
+    }
 
     &__row {
       display: flex;
       justify-content: flex-start;
       align-items: center;
+      font-size: 10px;  
     }
 
     &__icon {
