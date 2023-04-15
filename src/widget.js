@@ -1703,7 +1703,7 @@ class fetchClass {
   }
   
   fetchChartData(uri, fromState = false){
-    const url = 'https://graphs.coinpaprika.com' + uri;
+    const url = `https://graphsv2.coinpaprika.com${uri}`;
     return this.fetchData(url, fromState);
   }
   
