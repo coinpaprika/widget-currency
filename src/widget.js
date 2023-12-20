@@ -3,7 +3,7 @@ class widgetsController {
     this.widgets = new widgetsClass();
     this.bind();
   }
-  
+
   bind(){
     window[this.widgets.defaults.objectName] = {};
     document.addEventListener('DOMContentLoaded', () => this.initWidgets(), false);
@@ -12,7 +12,7 @@ class widgetsController {
       this.initWidgets();
     };
   }
-  
+
   initWidgets(){
     if (!window[this.widgets.defaults.objectName].init){
       window[this.widgets.defaults.objectName].init = true;
@@ -82,6 +82,9 @@ class widgetsClass {
       update_active: false,
       update_timeout: '30s',
       language: 'en',
+      customDate: false,
+      startDate: null,
+      endDate: null,
       style_src: null,
       img_src: null,
       lang_src: null,
@@ -120,7 +123,7 @@ class widgetsClass {
       },
     };
   }
-  
+
   init(index) {
     if (!this.getMainElement(index)) {
       return console.error('Bind failed, no element with class = "' + this.defaults.className + '"');
@@ -134,7 +137,7 @@ class widgetsClass {
     });
     return promise;
   }
-  
+
   setWidgetClass(elements) {
     for (let i = 0; i < elements.length; i++) {
       let width = elements[i].getBoundingClientRect().width;
@@ -148,11 +151,11 @@ class widgetsClass {
       }
     }
   }
-  
+
   getMainElement(index) {
     return (this.states[index]) ? this.states[index].mainElement : null;
   }
-  
+
   getDefaults(index) {
     return new Promise(resolve => {
       let mainElement = this.getMainElement(index);
@@ -162,6 +165,9 @@ class widgetsClass {
         if (mainElement.dataset.modules) this.updateData(index, 'modules', JSON.parse(mainElement.dataset.modules));
         if (mainElement.dataset.primaryCurrency) this.updateData(index, 'primary_currency', mainElement.dataset.primaryCurrency);
         if (mainElement.dataset.currency) this.updateData(index, 'currency', mainElement.dataset.currency);
+        if (mainElement.dataset.customDate) this.updateData(index, 'customDate', mainElement.dataset.customDate);
+        if (mainElement.dataset.startDate) this.updateData(index, 'startDate', mainElement.dataset.startDate);
+        if (mainElement.dataset.endDate) this.updateData(index, 'endDate', mainElement.dataset.endDate);
         if (mainElement.dataset.range) this.updateData(index, 'range', mainElement.dataset.range);
         if (mainElement.dataset.showDetailsCurrency) this.updateData(index, 'show_details_currency', (mainElement.dataset.showDetailsCurrency === 'true'));
         if (mainElement.dataset.updateActive) this.updateData(index, 'update_active', (mainElement.dataset.updateActive === 'true'));
@@ -178,7 +184,7 @@ class widgetsClass {
       return resolve();
     });
   }
-  
+
   setOriginLink(index) {
     if (Object.keys(this.defaults.translations).length === 0) this.getTranslations(this.defaults.language);
     let promise = Promise.resolve();
@@ -193,7 +199,7 @@ class widgetsClass {
     });
     return promise;
   }
-  
+
   addWidgetElement(index) {
     let mainElement = this.getMainElement(index);
     let modules = '';
@@ -227,7 +233,7 @@ class widgetsClass {
       }
       return null;
     });
-    
+
     promise = promise.then(() => {
       return this.setBeforeElementInFooter(index);
     });
@@ -236,7 +242,7 @@ class widgetsClass {
     });
     return promise;
   }
-  
+
   setSelectListeners(index){
     let mainElement = this.getMainElement(index);
     let selectElements = mainElement.querySelectorAll('.cp-widget-select');
@@ -249,7 +255,7 @@ class widgetsClass {
       }
     }
   }
-  
+
   setSelectOption(event, index){
     let className = 'cp-widget-active';
     for (let i = 0; i < event.target.parentNode.childNodes.length; i++){
@@ -265,12 +271,12 @@ class widgetsClass {
     event.target.classList.add(className);
     this.dispatchEvent(index, '-switch-range', value);
   }
-  
+
   dispatchEvent(index, name, data){
     let id = `${ this.defaults.className }-price-chart-${ index }`;
     return document.dispatchEvent(new CustomEvent(`${id}${name}`, { detail: { data } }));
   }
-  
+
   getData(index) {
     const url = 'https://api.coinpaprika.com/v1/widget/' + this.states[index].currency + '?quote=' + this.states[index].primary_currency;
     return fetchService.fetchData(url).then((response) => {
@@ -282,13 +288,13 @@ class widgetsClass {
       return this.onErrorRequest(index, error);
     });
   }
-  
+
   onErrorRequest(index, xhr) {
     if (this.states[index].isData) this.updateData(index, 'isData', false);
     this.updateData(index, 'message', 'data_unavailable');
     console.error('Request failed.  Returned status of ' + xhr, this.states[index]);
   }
-  
+
   initInterval(index) {
     clearInterval(this.states[index].interval);
     if (this.states[index].update_active && this.states[index].update_timeout > 1000) {
@@ -297,7 +303,7 @@ class widgetsClass {
       }, this.states[index].update_timeout);
     }
   }
-  
+
   setBeforeElementInFooter(index) {
     if (!this.states[index].isWordpress) {
       let mainElement = this.getMainElement(index);
@@ -316,7 +322,7 @@ class widgetsClass {
       }
     }
   }
-  
+
   updateWidgetElement(index, key, value, ticker) {
     let state = this.states[index];
     let mainElement = this.getMainElement(index);
@@ -372,7 +378,7 @@ class widgetsClass {
       }
     }
   }
-  
+
   updateData(index, key, value, ticker) {
     if (ticker) {
       this.states[index].ticker[key] = value;
@@ -382,9 +388,18 @@ class widgetsClass {
     if (key === 'language') {
       this.getTranslations(value);
     }
+    if (key === 'customDate') {
+      this.defaults.customDate = !!value;
+    }
+    if (key === 'startDate') {
+      this.defaults.startDate = value ?? false;
+    }
+    if (key === 'endDate') {
+      this.defaults.endDate = value ?? false;
+    }
     this.updateWidgetElement(index, key, value, ticker);
   }
-  
+
   updateWidgetTranslations(lang, data) {
     this.defaults.translations[lang] = data;
     for (let x = 0; x < this.states.length; x++) {
@@ -412,14 +427,14 @@ class widgetsClass {
       }
     }
   }
-  
+
   updateTicker(index, data) {
     let dataKeys = Object.keys(data);
     for (let i = 0; i < dataKeys.length; i++) {
       this.updateData(index, dataKeys[i], data[dataKeys[i]], true);
     }
   }
-  
+
   stylesheet() {
     if (this.defaults.style_src !== false) {
       let url = this.defaults.style_src || this.defaults.origin_src + '/dist/' + this.defaults.cssFileName;
@@ -430,7 +445,7 @@ class widgetsClass {
     }
     return Promise.resolve();
   }
-  
+
   widgetMainElement(index) {
     let data = this.states[index];
     return '<div class="cp-widget__header">' +
@@ -442,7 +457,7 @@ class widgetsClass {
       '</div>' +
       '</div>';
   }
-  
+
   widgetMainElementData(index) {
     let data = this.states[index];
     return '<h3><a href="' + this.coin_link(data.currency) + '">' +
@@ -456,12 +471,12 @@ class widgetsClass {
       '</strong>' +
       '<span class="cp-widget__rank-label"><span class="cp-translation translation_rank">' + this.getTranslation(index, "rank") + '</span> <span class="rankTicker">' + (data.ticker.rank || cpBootstrap.emptyData) + '</span></span>';
   }
-  
+
   widgetMainElementMessage(index) {
     let message = this.states[index].message;
     return '<div class="cp-widget__main-no-data cp-translation translation_message">' + (this.getTranslation(index, message)) + '</div>';
   }
-  
+
   widgetMarketDetailsElement(index) {
     return Promise.resolve((this.states[index].modules.indexOf('market_details') > -1) ? '<div class="cp-widget__details">' +
       this.widgetAthElement(index) +
@@ -469,7 +484,7 @@ class widgetsClass {
       this.widgetMarketCapElement(index) +
       '</div>' : '');
   }
-  
+
   widgetAthElement(index) {
     return '<div>' +
       '<small class="cp-translation translation_ath">' + this.getTranslation(index, "ath") + '</small>' +
@@ -480,7 +495,7 @@ class widgetsClass {
       '<span class="percent_from_price_athTicker cp-widget__rank">' + cpBootstrap.emptyData + '</span>' +
       '</div>'
   }
-  
+
   widgetVolume24hElement(index) {
     return '<div>' +
       '<small class="cp-translation translation_volume_24h">' + this.getTranslation(index, "volume_24h") + '</small>' +
@@ -491,7 +506,7 @@ class widgetsClass {
       '<span class="volume_24h_change_24hTicker cp-widget__rank">' + cpBootstrap.emptyData + '</span>' +
       '</div>';
   }
-  
+
   widgetMarketCapElement(index) {
     return '<div>' +
       '<small class="cp-translation translation_market_cap">' + this.getTranslation(index, "market_cap") + '</small>' +
@@ -502,13 +517,13 @@ class widgetsClass {
       '<span class="market_cap_change_24hTicker cp-widget__rank">' + cpBootstrap.emptyData + '</span>' +
       '</div>';
   }
-  
+
   widgetChartElement(index) {
     return Promise.resolve(
       `<div class="cp-widget__chart"><div id="${ this.defaults.className }-price-chart-${ index }"></div></div>`
     );
   }
-  
+
   widgetSelectElement(index, label){
     let buttons = '';
     for (let i = 0; i < this.states[index][label+'_list'].length; i++){
@@ -529,7 +544,7 @@ class widgetsClass {
       '</div>' +
       '</div>';
   }
-  
+
   widgetFooter(index) {
     let currency = this.states[index].currency;
     return (!this.states[index].isWordpress)
@@ -540,7 +555,7 @@ class widgetsClass {
       '</p>'
       : '';
   }
-  
+
   getImage(index) {
     let data = this.states[index];
     let imgContainers = data.mainElement.getElementsByClassName('cp-widget__img');
@@ -556,23 +571,23 @@ class widgetsClass {
       newImg.src = this.img_src(data.currency);
     }
   }
-  
+
   img_src(id) {
     return 'https://coinpaprika.com/coin/' + id + '/logo.png';
   }
-  
+
   coin_link(id) {
     return 'https://coinpaprika.com/coin/' + id
   }
-  
+
   main_logo_link() {
     return this.defaults.img_src || this.defaults.origin_src + '/dist/img/logo_widget.svg'
   }
-  
+
   getScriptElement() {
     return document.querySelector('script[data-cp-currency-widget]');
   }
-  
+
   getTranslation(index, label) {
     let text = (this.defaults.translations[this.states[index].language]) ? this.defaults.translations[this.states[index].language][label] : null;
     if (!text && this.defaults.translations['en']) {
@@ -584,12 +599,12 @@ class widgetsClass {
       return text;
     }
   }
-  
+
   addLabelWithoutTranslation(index, label) {
     if (!this.defaults.translations['en']) this.getTranslations('en');
     return this.states[index].noTranslationLabels.push(label);
   }
-  
+
   getTranslations(lang) {
     if (!this.defaults.translations[lang]) {
       const url = this.defaults.lang_src || this.defaults.origin_src + '/dist/lang/' + lang + '.json';
@@ -604,7 +619,7 @@ class widgetsClass {
           delete this.defaults.translations[lang];
         }
       });
-      
+
     }
   }
 }
@@ -620,6 +635,9 @@ class chartClass {
     this.container = container;
     this.options = this.setOptions();
     this.defaultRange = state.range || '7d';
+    this.customDate = state.customDate || false;
+    this.startDate = state.startDate || false;
+    this.endDate = state.endDate || false;
     this.callback = null;
     this.replaceCallback = null;
     this.extremesDataUrl = this.getExtremesDataUrl(container.id);
@@ -701,7 +719,7 @@ class chartClass {
     this.asyncParams = `?quote=${ state.primary_currency.toUpperCase() }&fields=price,volume`;
     this.init();
   }
-  
+
   setOptions(){
     const chartService = new chartClass();
     return {
@@ -911,7 +929,7 @@ class chartClass {
           return chartService.tooltipFormatter(this);
         },
       },
-      
+
       exporting: {
         buttons: {
           contextButton: {
@@ -919,13 +937,13 @@ class chartClass {
           }
         }
       },
-      
+
       xAxis: {
         lineColor: (this.isNightMode) ? '#505050' : '#e3e3e3',
         tickColor: (this.isNightMode) ? '#505050' : '#e3e3e3',
         tickLength: 7,
       },
-      
+
       yAxis: [{ // Volume yAxis
         lineWidth: 1,
         lineColor: '#dedede',
@@ -953,7 +971,7 @@ class chartClass {
         showLastLabel: false,
         showFirstLabel: false,
       }],
-      
+
       series: [
         { //order of the series matters
           color: '#5085ec',
@@ -994,7 +1012,7 @@ class chartClass {
         }]
     }
   }
-  
+
   init(){
     let promise = Promise.resolve();
     promise = promise.then(() => {
@@ -1005,7 +1023,7 @@ class chartClass {
     });
     return promise;
   }
-  
+
   parseOptions(options){
     let promise = Promise.resolve();
     promise = promise.then(() => {
@@ -1025,14 +1043,14 @@ class chartClass {
     });
     return promise;
   }
-  
+
   bind(chart){
     let promise = Promise.resolve();
     promise = promise.then(() => {
       return this.chart = chart;
     });
     promise = promise.then(() => {
-      return this.fetchDataPackage();
+      return this.customDate ? this.fetchDataPackage(this.startDate, this.endDate, true) : this.fetchDataPackage();
     });
     promise = promise.then(() => {
       return this.setRangeSwitcher();
@@ -1042,20 +1060,21 @@ class chartClass {
     });
     return promise;
   }
-  
-  fetchDataPackage(minDate, maxDate){
-    let isPreciseRange = (minDate && maxDate);
+
+  fetchDataPackage(minDate, maxDate, initial = false){
+    let isPreciseRange = (!!minDate && !!maxDate);
+    let showInitial = initial ? true : !isPreciseRange;
     let promise = Promise.resolve();
     promise = promise.then(() => {
       if (this.options.cpEvents){
         let url = (isPreciseRange) ? this.getNavigatorExtremesUrl(minDate, maxDate, 'events') : this.getExtremesDataUrl(this.id, 'events') + '/' + this.getRange() + '/';
-        return (url) ? this.fetchData(url, 'events', !isPreciseRange) : null;
+        return (url) ? this.fetchData(url, 'events', showInitial) : null;
       }
       return null;
     });
     promise = promise.then(() => {
       let url = ((isPreciseRange) ? this.getNavigatorExtremesUrl(minDate, maxDate) : this.asyncUrl.replace('_range_', this.getRange())) + this.asyncParams;
-      return (url) ? this.fetchData(url, 'data', !isPreciseRange) : null;
+      return (url) ? this.fetchData(url, 'data', showInitial) : null;
     });
     promise = promise.then(() => {
       return this.chart.redraw(false);
@@ -1071,7 +1090,7 @@ class chartClass {
     });
     return promise;
   }
-  
+
   fetchData(url, dataType = 'data', replace = true){
     let promise = Promise.resolve();
     promise = promise.then(() => {
@@ -1100,7 +1119,7 @@ class chartClass {
     });
     return promise;
   }
-  
+
   hideChart(bool = true){
     const classFunc = (bool) ? 'add' : 'remove';
     const siblings = cpBootstrap.nodeListToArray(this.container.parentElement.childNodes);
@@ -1116,18 +1135,18 @@ class chartClass {
     });
     return promise;
   }
-  
+
   setRangeSwitcher(){
     document.addEventListener(`${ this.id }-switch-range`, (event) => {
       this.defaultRange = event.detail.data;
       return this.fetchDataPackage();
     });
   }
-  
+
   getRange(){
     return this.defaultRange || '1q';
   }
-  
+
   toggleEvents(){
     let promise = Promise.resolve();
     if (this.options.cpEvents){
@@ -1156,7 +1175,7 @@ class chartClass {
     }
     return promise;
   }
-  
+
   dataParser(data, dataType = 'data'){
     switch (dataType){
       case 'data':
@@ -1173,7 +1192,7 @@ class chartClass {
         return null;
     }
   }
-  
+
   updateData(data, dataType) {
     let newData;
     let promise = Promise.resolve();
@@ -1209,7 +1228,7 @@ class chartClass {
     });
     return promise;
   }
-  
+
   isTheSameElement(elementA, elementB, dataType){
     switch (dataType){
       case 'data':
@@ -1220,7 +1239,7 @@ class chartClass {
         return false;
     }
   }
-  
+
   sortCondition(elementA, elementB, dataType){
     switch (dataType){
       case 'data':
@@ -1231,11 +1250,11 @@ class chartClass {
         return false;
     }
   }
-  
+
   getOldData(dataType){
     return this['chart_'+dataType.toLowerCase()];
   }
-  
+
   replaceData(data, dataType){
     let promise = Promise.resolve();
     promise = promise.then(() => {
@@ -1249,7 +1268,7 @@ class chartClass {
     });
     return promise;
   }
-  
+
   replaceDataType(data, dataType){
     switch (dataType){
       case 'data':
@@ -1283,11 +1302,11 @@ class chartClass {
         return null;
     }
   }
-  
+
   isExcluded(label){
     return this.excludeSeriesIds.indexOf(label) > -1;
   }
-  
+
   tooltipFormatter(pointer, label = '', search){
     if (!search) search = label;
     const header = '<div class="cp-chart-tooltip-currency"><small>'+new Date(pointer.x).toUTCString()+'</small><table>';
@@ -1303,7 +1322,7 @@ class chartClass {
     });
     return header + content + footer;
   }
-  
+
   setAnnotationsObjects(data){
     this.chart.series[0].xAxis.removePlotLine();
     let plotLines = [];
@@ -1371,7 +1390,7 @@ class chartClass {
     });
     return promise;
   }
-  
+
   setNavigator(options){
     let navigatorOptions = {};
     let promise = Promise.resolve();
@@ -1418,7 +1437,7 @@ class chartClass {
     });
     return promise;
   }
-  
+
   setResetZoomButton(){
     // return Promise.resolve(); // cant be positioned properly in plotBox, so its disabled
     let promise = Promise.resolve();
@@ -1437,7 +1456,7 @@ class chartClass {
     });
     return promise;
   }
-  
+
   navigatorExtremesListener() {
     let promise = Promise.resolve();
     promise = promise.then(() => {
@@ -1453,12 +1472,12 @@ class chartClass {
     });
     return promise;
   }
-  
+
   getNavigatorExtremesUrl(minDate, maxDate, dataType){
     let extremesDataUrl = (dataType) ? this.getExtremesDataUrl(this.id, dataType) : this.extremesDataUrl;
     return (minDate && maxDate && extremesDataUrl) ? extremesDataUrl +'/dates/'+minDate+'/'+maxDate+'/' : null;
   }
-  
+
   setNoDataLabel(options){
     let noDataOptions = {};
     let promise = Promise.resolve();
@@ -1479,7 +1498,7 @@ class chartClass {
     });
     return promise;
   }
-  
+
   addContainer(id, label, className, tagName = 'div'){
     let container = document.createElement(tagName);
     let chartContainer = document.getElementById(id);
@@ -1487,15 +1506,15 @@ class chartClass {
     container.classList.add(className);
     chartContainer.appendChild(container);
   }
-  
+
   getContainer(label){
     return document.getElementById(this.id+label);
   }
-  
+
   getExtremesDataUrl(id, dataType = 'data'){
     return '/currency/'+ dataType +'/'+ this.currency;
   }
-  
+
   getVolumePattern(){
     return {
       defs: {
@@ -1529,11 +1548,11 @@ class bootstrapClass {
     this.emptyValue = 0;
     this.emptyData = '-';
   }
-  
+
   nodeListToArray(nodeList) {
     return Array.prototype.slice.call(nodeList);
   }
-  
+
   parseIntervalValue(value) {
     let timeSymbol = '', multiplier = 1;
     if (value.search('s') > -1) {
@@ -1554,7 +1573,7 @@ class bootstrapClass {
     }
     return parseFloat(value.replace(timeSymbol, '')) * multiplier;
   }
-  
+
   isFiat(currency, origin){
     if (!origin) Promise.resolve(false);
     let promise = Promise.resolve();
@@ -1567,7 +1586,7 @@ class bootstrapClass {
     });
     return promise;
   }
-  
+
   updateObject(obj, newObj) {
     let result = obj;
     let promise = Promise.resolve();
@@ -1586,7 +1605,7 @@ class bootstrapClass {
     });
     return promise;
   }
-  
+
   parseCurrencyNumber(value, currency, origin){
     let promise = Promise.resolve();
     promise = promise.then(() => {
@@ -1597,7 +1616,7 @@ class bootstrapClass {
     });
     return promise;
   }
-  
+
   parseNumber(number, precision) {
     if (!number && number !== 0) return number;
     if (number === this.emptyValue || number === this.emptyData) return number;
@@ -1635,13 +1654,13 @@ class bootstrapClass {
       }
     }
   }
-  
+
   round(amount, decimal = 8, direction = 'round') {
     amount = parseFloat(amount);
     decimal = Math.pow(10, decimal);
     return Math[direction](amount * decimal) / decimal;
   }
-  
+
   loop(arr, fn, busy, err, i = 0) {
     const body = (ok, er) => {
       try {
@@ -1662,7 +1681,7 @@ class fetchClass {
   constructor(){
     this.state = {};
   }
-  
+
   fetchScript(url) {
     if (this.state[url]) return Promise.resolve(null);
     this.state[url] = 'pending';
@@ -1681,7 +1700,7 @@ class fetchClass {
       script.src = url;
     });
   }
-  
+
   fetchStyle(url) {
     if (this.state[url]) return Promise.resolve(null);
     this.state[url] = 'pending';
@@ -1701,12 +1720,12 @@ class fetchClass {
       link.href = url;
     });
   }
-  
+
   fetchChartData(uri, fromState = false){
     const url = `https://graphsv2.coinpaprika.com${uri}`;
     return this.fetchData(url, fromState);
   }
-  
+
   fetchData(url, fromState = false){
     let promise = Promise.resolve();
     promise = promise.then(() => {
@@ -1736,7 +1755,7 @@ class fetchClass {
     });
     return promise;
   }
-  
+
   fetchJsonFile(url, fromState = false){
     return this.fetchData(url, fromState).then(result => {
       if (result.status === 200) {
