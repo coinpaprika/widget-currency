@@ -5,7 +5,11 @@ class widgetsController {
   }
   bind() {
     window[this.widgets.defaults.objectName] = {};
-    document.addEventListener("DOMContentLoaded", () => this.initWidgets(), false);
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => this.initWidgets(),
+      false
+    );
     window[this.widgets.defaults.objectName].bindWidget = () => {
       window[this.widgets.defaults.objectName].init = false;
       this.initWidgets();
@@ -14,14 +18,20 @@ class widgetsController {
   initWidgets() {
     if (!window[this.widgets.defaults.objectName].init) {
       window[this.widgets.defaults.objectName].init = true;
-      let mainElements = Array.prototype.slice.call(document.getElementsByClassName(this.widgets.defaults.className));
+      let mainElements = Array.prototype.slice.call(
+        document.getElementsByClassName(this.widgets.defaults.className)
+      );
       this.widgets.setWidgetClass(mainElements);
-      window.addEventListener("resize", () => {
-        this.widgets.setWidgetClass(mainElements);
-        for (let i = 0; i < mainElements.length; i++) {
-          this.widgets.setBeforeElementInFooter(i);
-        }
-      }, false);
+      window.addEventListener(
+        "resize",
+        () => {
+          this.widgets.setWidgetClass(mainElements);
+          for (let i = 0; i < mainElements.length; i++) {
+            this.widgets.setBeforeElementInFooter(i);
+          }
+        },
+        false
+      );
       let scriptElement = this.widgets.getScriptElement();
       if (scriptElement && scriptElement.dataset && scriptElement.dataset.cpCurrencyWidget) {
         let dataset = JSON.parse(scriptElement.dataset.cpCurrencyWidget);
@@ -38,7 +48,9 @@ class widgetsController {
         return cpBootstrap.loop(mainElements, (element, index) => {
           let newSettings = JSON.parse(JSON.stringify(this.widgets.defaults));
           newSettings.isWordpress = element.classList.contains("wordpress");
-          newSettings.isNightMode = element.classList.contains("cp-widget__night-mode");
+          newSettings.isNightMode = element.classList.contains(
+            "cp-widget__night-mode"
+          );
           newSettings.mainElement = element;
           this.widgets.states.push(newSettings);
           let promise = Promise.resolve();
@@ -120,7 +132,9 @@ class widgetsClass {
   }
   init(index) {
     if (!this.getMainElement(index)) {
-      return console.error('Bind failed, no element with class = "' + this.defaults.className + '"');
+      return console.error(
+        'Bind failed, no element with class = "' + this.defaults.className + '"'
+      );
     }
     let promise = Promise.resolve();
     promise = promise.then(() => {
@@ -158,9 +172,17 @@ class widgetsClass {
         if (!mainElement.dataset.modules && mainElement.dataset.version === "standard")
           this.updateData(index, "modules", []);
         if (mainElement.dataset.modules)
-          this.updateData(index, "modules", JSON.parse(mainElement.dataset.modules));
+          this.updateData(
+            index,
+            "modules",
+            JSON.parse(mainElement.dataset.modules)
+          );
         if (mainElement.dataset.primaryCurrency)
-          this.updateData(index, "primary_currency", mainElement.dataset.primaryCurrency);
+          this.updateData(
+            index,
+            "primary_currency",
+            mainElement.dataset.primaryCurrency
+          );
         if (mainElement.dataset.currency)
           this.updateData(index, "currency", mainElement.dataset.currency);
         if (mainElement.dataset.customDate)
@@ -172,17 +194,33 @@ class widgetsClass {
         if (mainElement.dataset.range)
           this.updateData(index, "range", mainElement.dataset.range);
         if (mainElement.dataset.showDetailsCurrency)
-          this.updateData(index, "show_details_currency", mainElement.dataset.showDetailsCurrency === "true");
+          this.updateData(
+            index,
+            "show_details_currency",
+            mainElement.dataset.showDetailsCurrency === "true"
+          );
         if (mainElement.dataset.updateActive)
-          this.updateData(index, "update_active", mainElement.dataset.updateActive === "true");
+          this.updateData(
+            index,
+            "update_active",
+            mainElement.dataset.updateActive === "true"
+          );
         if (mainElement.dataset.updateTimeout)
-          this.updateData(index, "update_timeout", cpBootstrap.parseIntervalValue(mainElement.dataset.updateTimeout));
+          this.updateData(
+            index,
+            "update_timeout",
+            cpBootstrap.parseIntervalValue(mainElement.dataset.updateTimeout)
+          );
         if (mainElement.dataset.language)
           this.updateData(index, "language", mainElement.dataset.language);
         if (mainElement.dataset.originSrc)
           this.updateData(index, "origin_src", mainElement.dataset.originSrc);
         if (mainElement.dataset.nodeModulesSrc)
-          this.updateData(index, "node_modules_src", mainElement.dataset.nodeModulesSrc);
+          this.updateData(
+            index,
+            "node_modules_src",
+            mainElement.dataset.nodeModulesSrc
+          );
         if (mainElement.dataset.bowerSrc)
           this.updateData(index, "bower_src", mainElement.dataset.bowerSrc);
         if (mainElement.dataset.styleSrc)
@@ -229,19 +267,29 @@ class widgetsClass {
           label = "Chart";
         if (module === "market_details")
           label = "MarketDetails";
-        return label ? this[`widget${label}Element`](index).then((result) => modules += result) : null;
+        return label ? this[`widget${label}Element`](index).then(
+          (result) => modules += result
+        ) : null;
       });
     });
     promise = promise.then(() => {
       return mainElement.innerHTML = this.widgetMainElement(index) + modules + this.widgetFooter(index);
     });
     promise = promise.then(() => {
-      chartContainer = document.getElementById(`${this.defaults.className}-price-chart-${index}`);
-      return chartContainer ? chartContainer.parentElement.insertAdjacentHTML("beforeend", this.widgetSelectElement(index, "range")) : null;
+      chartContainer = document.getElementById(
+        `${this.defaults.className}-price-chart-${index}`
+      );
+      return chartContainer ? chartContainer.parentElement.insertAdjacentHTML(
+        "beforeend",
+        this.widgetSelectElement(index, "range")
+      ) : null;
     });
     promise = promise.then(() => {
       if (chartContainer) {
-        this.states[index].chart = new chartClass(chartContainer, this.states[index]);
+        this.states[index].chart = new chartClass(
+          chartContainer,
+          this.states[index]
+        );
         this.setSelectListeners(index);
       }
       return null;
@@ -258,11 +306,17 @@ class widgetsClass {
     let mainElement = this.getMainElement(index);
     let selectElements = mainElement.querySelectorAll(".cp-widget-select");
     for (let i = 0; i < selectElements.length; i++) {
-      let buttons = selectElements[i].querySelectorAll(".cp-widget-select__options button");
+      let buttons = selectElements[i].querySelectorAll(
+        ".cp-widget-select__options button"
+      );
       for (let j = 0; j < buttons.length; j++) {
-        buttons[j].addEventListener("click", (event2) => {
-          this.setSelectOption(event2, index);
-        }, false);
+        buttons[j].addEventListener(
+          "click",
+          (event2) => {
+            this.setSelectOption(event2, index);
+          },
+          false
+        );
       }
     }
   }
@@ -275,16 +329,23 @@ class widgetsClass {
     }
     let parent = event2.target.closest(".cp-widget-select");
     let type = parent.dataset.type;
-    let pickedValueElement = parent.querySelector(".cp-widget-select__options > span");
+    let pickedValueElement = parent.querySelector(
+      ".cp-widget-select__options > span"
+    );
     let value = event2.target.dataset.option;
-    pickedValueElement.innerText = this.getTranslation(index, value.toLowerCase());
+    pickedValueElement.innerText = this.getTranslation(
+      index,
+      value.toLowerCase()
+    );
     this.updateData(index, type, value);
     event2.target.classList.add(className);
     this.dispatchEvent(index, "-switch-range", value);
   }
   dispatchEvent(index, name, data) {
     let id = `${this.defaults.className}-price-chart-${index}`;
-    return document.dispatchEvent(new CustomEvent(`${id}${name}`, { detail: { data } }));
+    return document.dispatchEvent(
+      new CustomEvent(`${id}${name}`, { detail: { data } })
+    );
   }
   getData(index) {
     const url = "https://api.coinpaprika.com/v1/widget/" + this.states[index].currency + "?quote=" + this.states[index].primary_currency;
@@ -302,7 +363,10 @@ class widgetsClass {
     if (this.states[index].isData)
       this.updateData(index, "isData", false);
     this.updateData(index, "message", "data_unavailable");
-    console.error("Request failed.  Returned status of " + xhr, this.states[index]);
+    console.error(
+      "Request failed.  Returned status of " + xhr,
+      this.states[index]
+    );
   }
   initInterval(index) {
     clearInterval(this.states[index].interval);
@@ -337,7 +401,9 @@ class widgetsClass {
       let tickerClass = ticker ? "Ticker" : "";
       if (key === "name" || key === "currency") {
         if (key === "currency") {
-          let aElements = mainElement.querySelectorAll(".cp-widget__footer > a");
+          let aElements = mainElement.querySelectorAll(
+            ".cp-widget__footer > a"
+          );
           for (let k = 0; k < aElements.length; k++) {
             aElements[k].href = this.coin_link(value);
           }
@@ -350,7 +416,9 @@ class widgetsClass {
           headerElements[k].innerHTML = !state.isData ? this.widgetMainElementMessage(index) : this.widgetMainElementData(index);
         }
       } else {
-        let updateElements = mainElement.querySelectorAll("." + key + tickerClass);
+        let updateElements = mainElement.querySelectorAll(
+          "." + key + tickerClass
+        );
         for (let j = 0; j < updateElements.length; j++) {
           let updateElement = updateElements[j];
           if (updateElement.classList.contains("cp-widget__rank")) {
@@ -372,7 +440,11 @@ class widgetsClass {
             const origin = this.defaults.data_src || this.defaults.origin_src;
             let promise = Promise.resolve();
             promise = promise.then(() => {
-              return cpBootstrap.parseCurrencyNumber(value, state.primary_currency, origin);
+              return cpBootstrap.parseCurrencyNumber(
+                value,
+                state.primary_currency,
+                origin
+              );
             });
             promise = promise.then((result) => {
               return updateElement.innerText = result || cpBootstrap.emptyData;
@@ -411,7 +483,9 @@ class widgetsClass {
       let isNoTranslationLabelsUpdate = this.states[x].noTranslationLabels.length > 0 && lang === "en";
       if (this.states[x].language === lang || isNoTranslationLabelsUpdate) {
         let mainElement = this.states[x].mainElement;
-        let transalteElements = Array.prototype.slice.call(mainElement.querySelectorAll(".cp-translation"));
+        let transalteElements = Array.prototype.slice.call(
+          mainElement.querySelectorAll(".cp-translation")
+        );
         for (let y = 0; y < transalteElements.length; y++) {
           transalteElements[y].classList.forEach((className) => {
             if (className.search("translation_") > -1) {
@@ -462,7 +536,9 @@ class widgetsClass {
     return '<div class="cp-widget__main-no-data cp-translation translation_message">' + this.getTranslation(index, message) + "</div>";
   }
   widgetMarketDetailsElement(index) {
-    return Promise.resolve(this.states[index].modules.indexOf("market_details") > -1 ? '<div class="cp-widget__details">' + this.widgetAthElement(index) + this.widgetVolume24hElement(index) + this.widgetMarketCapElement(index) + "</div>" : "");
+    return Promise.resolve(
+      this.states[index].modules.indexOf("market_details") > -1 ? '<div class="cp-widget__details">' + this.widgetAthElement(index) + this.widgetVolume24hElement(index) + this.widgetMarketCapElement(index) + "</div>" : ""
+    );
   }
   widgetAthElement(index) {
     return '<div><small class="cp-translation translation_ath">' + this.getTranslation(index, "ath") + '</small><div><span class="price_athTicker parseNumber">' + cpBootstrap.emptyData + ' </span><span class="symbolTicker showDetailsCurrency"></span></div><span class="percent_from_price_athTicker cp-widget__rank">' + cpBootstrap.emptyData + "</span></div>";
@@ -610,7 +686,9 @@ class chartClass {
           events: {
             legendItemClick: (event2) => {
               if (event2.browserEvent.isTrusted) {
-                if (this.chartsWithActiveSeriesCookies.indexOf(event2.target.chart.renderTo.id) > -1)
+                if (this.chartsWithActiveSeriesCookies.indexOf(
+                  event2.target.chart.renderTo.id
+                ) > -1)
                   this.setVisibleChartCookies(event2);
               }
               return event2.browserEvent.isTrusted;
@@ -811,13 +889,7 @@ class chartClass {
         plotBorderWidth: 0
       },
       cpEvents: false,
-      colors: [
-        "#5085ec",
-        "#1f9809",
-        "#985d65",
-        "#ee983b",
-        "#4c4c4c"
-      ],
+      colors: ["#5085ec", "#1f9809", "#985d65", "#ee983b", "#4c4c4c"],
       legend: {
         margin: 0,
         enabled: true,
@@ -861,34 +933,37 @@ class chartClass {
         tickColor: this.isNightMode ? "#505050" : "#e3e3e3",
         tickLength: 7
       },
-      yAxis: [{
-        // Volume yAxis
-        lineWidth: 1,
-        lineColor: "#dedede",
-        tickWidth: 1,
-        tickLength: 4,
-        gridLineDashStyle: "dash",
-        gridLineWidth: 0,
-        floor: 0,
-        minPadding: 0,
-        opposite: false,
-        showEmpty: false,
-        showLastLabel: false,
-        showFirstLabel: false
-      }, {
-        gridLineColor: this.isNightMode ? "#505050" : "#e3e3e3",
-        gridLineDashStyle: "dash",
-        lineWidth: 1,
-        tickWidth: 1,
-        tickLength: 4,
-        floor: 0,
-        minPadding: 0,
-        showEmpty: false,
-        opposite: true,
-        gridZIndex: 4,
-        showLastLabel: false,
-        showFirstLabel: false
-      }],
+      yAxis: [
+        {
+          // Volume yAxis
+          lineWidth: 1,
+          lineColor: "#dedede",
+          tickWidth: 1,
+          tickLength: 4,
+          gridLineDashStyle: "dash",
+          gridLineWidth: 0,
+          floor: 0,
+          minPadding: 0,
+          opposite: false,
+          showEmpty: false,
+          showLastLabel: false,
+          showFirstLabel: false
+        },
+        {
+          gridLineColor: this.isNightMode ? "#505050" : "#e3e3e3",
+          gridLineDashStyle: "dash",
+          lineWidth: 1,
+          tickWidth: 1,
+          tickLength: 4,
+          floor: 0,
+          minPadding: 0,
+          showEmpty: false,
+          opposite: true,
+          gridZIndex: 4,
+          showLastLabel: false,
+          showFirstLabel: false
+        }
+      ],
       series: [
         {
           //order of the series matters
@@ -937,7 +1012,11 @@ class chartClass {
       return this.parseOptions(this.options);
     });
     promise = promise.then((options) => {
-      return window.Highcharts ? Highcharts.stockChart(this.container.id, options, (chart) => this.bind(chart)) : null;
+      return window.Highcharts ? Highcharts.stockChart(
+        this.container.id,
+        options,
+        (chart) => this.bind(chart)
+      ) : null;
     });
     return promise;
   }
@@ -1014,7 +1093,9 @@ class chartClass {
     promise = promise.then((response) => {
       this.chart.hideLoading();
       if (response.status !== 200) {
-        return console.log(`Looks like there was a problem. Status Code: ${response.status}`);
+        return console.log(
+          `Looks like there was a problem. Status Code: ${response.status}`
+        );
       }
       return response.json().then((data) => {
         let promise2 = Promise.resolve();
@@ -1035,16 +1116,23 @@ class chartClass {
   }
   hideChart(bool = true) {
     const classFunc = bool ? "add" : "remove";
-    const siblings = cpBootstrap.nodeListToArray(this.container.parentElement.childNodes);
+    const siblings = cpBootstrap.nodeListToArray(
+      this.container.parentElement.childNodes
+    );
     let promise = Promise.resolve();
     promise = promise.then(() => {
       return siblings.filter((element) => element.id.search("chart") === -1);
     });
     promise = promise.then((result) => {
-      return cpBootstrap.loop(result, (element) => element.classList[classFunc]("cp-hidden"));
+      return cpBootstrap.loop(
+        result,
+        (element) => element.classList[classFunc]("cp-hidden")
+      );
     });
     promise = promise.then(() => {
-      return this.container.parentElement.classList[classFunc]("cp-chart-no-data");
+      return this.container.parentElement.classList[classFunc](
+        "cp-chart-no-data"
+      );
     });
     return promise;
   }
@@ -1113,15 +1201,23 @@ class chartClass {
               return;
             let oldData2 = this.getOldData(dataType)[value[0]];
             newData[value[0]] = oldData2.filter((element) => {
-              return value[1].findIndex((findElement) => this.isTheSameElement(element, findElement, dataType)) === -1;
-            }).concat(value[1]).sort((data1, data2) => this.sortCondition(data1, data2, dataType));
+              return value[1].findIndex(
+                (findElement) => this.isTheSameElement(element, findElement, dataType)
+              ) === -1;
+            }).concat(value[1]).sort(
+              (data1, data2) => this.sortCondition(data1, data2, dataType)
+            );
           });
         case "events":
           newData = [];
           let oldData = this.getOldData(dataType);
           return newData = oldData.filter((element) => {
-            data.findIndex((findElement) => this.isTheSameElement(element, findElement, dataType)) === -1;
-          }).concat(data).sort((data1, data2) => this.sortCondition(data1, data2, dataType));
+            data.findIndex(
+              (findElement) => this.isTheSameElement(element, findElement, dataType)
+            ) === -1;
+          }).concat(data).sort(
+            (data1, data2) => this.sortCondition(data1, data2, dataType)
+          );
         default:
           return false;
       }
@@ -1185,14 +1281,21 @@ class chartClass {
         return cpBootstrap.loop(Object.entries(data), (value) => {
           if (this.isExcluded(value[0]))
             return;
-          return this.chart.get(value[0]) ? this.chart.get(value[0]).setData(value[1], false, false, false) : this.chart.addSeries({ id: value[0], data: value[1], showInNavigator: true });
+          return this.chart.get(value[0]) ? this.chart.get(value[0]).setData(value[1], false, false, false) : this.chart.addSeries({
+            id: value[0],
+            data: value[1],
+            showInNavigator: true
+          });
         });
       case "events":
         let promise = Promise.resolve();
         promise = promise.then(() => {
-          return cpBootstrap.loop(this.chart.annotations.allItems, (annotation) => {
-            return annotation.destroy();
-          });
+          return cpBootstrap.loop(
+            this.chart.annotations.allItems,
+            (annotation) => {
+              return annotation.destroy();
+            }
+          );
         });
         promise = promise.then(() => {
           return this.setAnnotationsObjects(data);
@@ -1212,7 +1315,8 @@ class chartClass {
     const footer = "</table></div>";
     let content = "";
     pointer.points.forEach((point) => {
-      content += '<tr><td class="cp-chart-tooltip-currency__row"><svg class="cp-chart-tooltip-currency__icon" width="5" height="5"><rect x="0" y="0" width="5" height="5" fill="' + point.series.color + '" fill-opacity="1"></rect></svg>' + point.series.name + ": " + point.y.toLocaleString("ru-RU", { maximumFractionDigits: 8 }).replace(",", ".") + " " + (point.series.name.toLowerCase().search(search.toLowerCase()) > -1 ? "" : label) + "</td></tr>";
+      content += '<tr><td class="cp-chart-tooltip-currency__row"><svg class="cp-chart-tooltip-currency__icon" width="5" height="5"><rect x="0" y="0" width="5" height="5" fill="' + point.series.color + '" fill-opacity="1"></rect></svg>' + point.series.name + ": " + point.y.toLocaleString("en-US", { maximumFractionDigits: 8 });
+      " " + (point.series.name.toLowerCase().search(search.toLowerCase()) > -1 ? "" : label) + "</td></tr>";
     });
     return header + content + footer;
   }
@@ -1279,9 +1383,12 @@ class chartClass {
       });
     });
     promise = promise.then(() => {
-      return this.chart.series[0].xAxis.update({
-        plotLines
-      }, false);
+      return this.chart.series[0].xAxis.update(
+        {
+          plotLines
+        },
+        false
+      );
     });
     return promise;
   }
@@ -1306,13 +1413,15 @@ class chartClass {
             events: {
               setExtremes: (e) => {
                 if ((e.trigger === "navigator" || e.trigger === "zoom") && e.min && e.max) {
-                  document.dispatchEvent(new CustomEvent(this.id + "SetExtremes", {
-                    detail: {
-                      minDate: e.min,
-                      maxDate: e.max,
-                      e
-                    }
-                  }));
+                  document.dispatchEvent(
+                    new CustomEvent(this.id + "SetExtremes", {
+                      detail: {
+                        minDate: e.min,
+                        maxDate: e.max,
+                        e
+                      }
+                    })
+                  );
                 }
               }
             }
@@ -1334,7 +1443,12 @@ class chartClass {
   setResetZoomButton() {
     let promise = Promise.resolve();
     promise = promise.then(() => {
-      return this.addContainer(this.id, "ResetZoom", "cp-chart-reset-zoom", "button");
+      return this.addContainer(
+        this.id,
+        "ResetZoom",
+        "cp-chart-reset-zoom",
+        "button"
+      );
     });
     promise = promise.then(() => {
       return this.getContainer("ResetZoom");
@@ -1405,8 +1519,8 @@ class chartClass {
       defs: {
         patterns: [
           {
-            "id": "fill-pattern",
-            "path": {
+            id: "fill-pattern",
+            path: {
               d: "M 3 0 L 3 10 M 8 0 L 8 10",
               stroke: "#e3e3e3",
               fill: "#f1f1f1",
@@ -1414,8 +1528,8 @@ class chartClass {
             }
           },
           {
-            "id": "fill-pattern-night",
-            "path": {
+            id: "fill-pattern-night",
+            path: {
               d: "M 3 0 L 3 10 M 8 0 L 8 10",
               stroke: "#9b9b9b",
               fill: "#383838",
@@ -1474,9 +1588,11 @@ class bootstrapClass {
     promise = promise.then(() => {
       return cpBootstrap.loop(Object.keys(newObj), (key) => {
         if (result.hasOwnProperty(key) && typeof result[key] === "object") {
-          return this.updateObject(result[key], newObj[key]).then((updateResult) => {
-            result[key] = updateResult;
-          });
+          return this.updateObject(result[key], newObj[key]).then(
+            (updateResult) => {
+              result[key] = updateResult;
+            }
+          );
         }
         return result[key] = newObj[key];
       });
@@ -1528,9 +1644,11 @@ class bootstrapClass {
             precision = 4;
           }
         }
-        return this.round(number, precision).toLocaleString("ru-RU", { maximumFractionDigits: precision }).replace(",", ".");
+        return this.round(number, precision).toLocaleString("en-US", {
+          maximumFractionDigits: precision
+        });
       } else {
-        return number.toLocaleString("ru-RU", { minimumFractionDigits: 2 }).replace(",", ".");
+        return number.toLocaleString("en-US", { minimumFractionDigits: 2 });
       }
     }
   }
