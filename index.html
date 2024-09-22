@@ -1,49 +1,70 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
     <title>Widget - Coinpaprika</title>
-    <link rel="shortcut icon" type="image/x-icon" href="https://static.coinpaprika.com/static/files/89ce98df.ico#greywizard/rock-coin-web/assets/coin/img/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="https://static.coinpaprika.com/static/files/89ce98df.ico#greywizard/rock-coin-web/assets/coin/img/favicon.ico"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1"
+    />
     <style>
-        body.night-mode {
-            background: #252525;
-        }
-        body {
-            padding: 50px;
-        }
+      body.night-mode {
+        background: #252525;
+      }
+      body {
+        padding: 50px;
+      }
     </style>
     <!--<script type="text/javascript" src="./node_modules/bluebird/js/browser/bluebird.min.js"></script>-->
-</head>
-<body class="">
-<div class="coinpaprika-currency-widget wordpress"
-     data-primary-currency="USD"></div>
-<div class="coinpaprika-currency-widget "
-     data-primary-currency="PLN"
-     data-language="pl"
-     data-currency="usdt-tether"></div>
-<div class="coinpaprika-currency-widget "
-     data-primary-currency="USD"
-     data-language="fr"
-     data-currency="sol-solana"></div>
-<div class="coinpaprika-currency-widget "
-     data-primary-currency="EUR"
-     data-language="de"
-     data-currency="bch-bitcoin-cash"></div>
-<div class="coinpaprika-currency-widget "
-     data-primary-currency="USD"
-     data-language="pl"
-     data-currency="xrp-xrp"></div>
-<div class="coinpaprika-currency-widget "
-     data-primary-currency="USD"
-     data-currency="eth-ethereum"
-     data-custom-date="true"
-     data-start-date="1633021600"
-     data-end-date="1687093600"></div>
-<script type="module"
-        data-cp-currency-widget='{
+  </head>
+  <body class="">
+    <div
+      class="coinpaprika-currency-widget wordpress"
+      data-primary-currency="USD"
+    ></div>
+    <div
+      class="coinpaprika-currency-widget"
+      data-primary-currency="PLN"
+      data-language="pl"
+      data-currency="usdt-tether"
+    ></div>
+    <div
+      class="coinpaprika-currency-widget"
+      data-primary-currency="USD"
+      data-language="fr"
+      data-currency="sol-solana"
+    ></div>
+    <div
+      class="coinpaprika-currency-widget"
+      data-primary-currency="EUR"
+      data-language="de"
+      data-currency="bch-bitcoin-cash"
+    ></div>
+    <div
+      class="coinpaprika-currency-widget"
+      data-primary-currency="USD"
+      data-language="pl"
+      data-currency="xrp-xrp"
+    ></div>
+    <div
+      class="coinpaprika-currency-widget"
+      data-primary-currency="USD"
+      data-currency="eth-ethereum"
+      data-custom-date="true"
+      data-start-date="1633021600"
+      data-end-date="1687093600"
+    ></div>
+    <script
+      type="module"
+      data-cp-currency-widget='{
             "origin-src": "."
         }'
-        src="./src/widget.js"></script>
-<!--<script src="https://cdn.jsdelivr.net/npm/@coinpaprika/widget-currency/dist/widget.min.js"></script>-->
-</body>
+      src="./src/widget.js"
+    ></script>
+    <!--<script src="https://cdn.jsdelivr.net/npm/@coinpaprika/widget-currency/dist/widget.min.js"></script>-->
+  </body>
 </html>
