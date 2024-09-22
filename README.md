@@ -17,19 +17,19 @@ example:
 ```
 
 #### In script element: "data-cp-currency-widget='{ "/parameter/": /value/ }'"
-##### this parameters is set to all widgets on page
+##### these parameters are set for all widgets on the page
 example:
 ```html
 <div class="coinpaprika-currency-widget"></div>
-<script src="./src/widget.js"
+<script src="https://unpkg.com/@coinpaprika/widget-currency/dist/widget.umd.js"
         data-cp-currency-widget='{
             "language": "pl",
             "primary-currency": "ETH",
-            "origin-src": "."
+            "origin-src": "https://unpkg.com/@coinpaprika/widget-currency/dist"
         }'>
 </script>
 ```
-###
+
 ### API:
 **currency** - Currency ID that you can get from [API](https://api.coinpaprika.com/#tag/coins) ex. 'btc-bitcoin'
 ```text
@@ -64,7 +64,7 @@ default: '7d'
 
 **update-active** - bool value is live data updates active
 ```text
-deafult: false
+default: false
 ```
 
 **update-timeout** - Update interval '30s', '1m', '5m', '10m', '30m'
@@ -79,7 +79,7 @@ default: 'en'
 
 **origin-src** - custom link to `/dist` directory
 ```text
-default: 'https://unpkg.com/@coinpaprika/widget-currency'
+default: 'https://unpkg.com/@coinpaprika/widget-currency/dist'
 ```
 
 **style-src** - custom link to css file, if you don't want to fetch styles from js set as `false`
@@ -101,15 +101,11 @@ default: null
 
 <img src="https://i.imgur.com/umLLWUz.png" alt="" data-canonical-src="https://i.imgur.com/umLLWUz.png" height="148" />
 
-######
-
 Enable styling for dark backgrounds by adding `cp-widget__night-mode` class to widget element
-
 
 ```html
 <div class="coinpaprika-currency-widget cp-widget__night-mode"></div>
 ```
-
 
 ### Copy paste this code in your HTML, replacing data parameters
 
@@ -119,7 +115,7 @@ Enable styling for dark backgrounds by adding `cp-widget__night-mode` class to w
      data-currency="btc-bitcoin"
      data-update-active="false" 
      data-update-timeout="30s"></div>
-<script src="https://unpkg.com/@coinpaprika/widget-currency/dist/widget.min.js"></script>
+<script src="https://unpkg.com/@coinpaprika/widget-currency/dist/widget.umd.js"></script>
 ```
 
 ### Via npm
@@ -130,23 +126,9 @@ Then add this to your HTML, replacing data parameters
 
 ```html
 <div class="coinpaprika-currency-widget"></div>
-<script src="../node_modules/@coinpaprika/widget-currency/dist/widget.min.js" 
+<script src="../node_modules/@coinpaprika/widget-currency/dist/widget.umd.js" 
         data-cp-currency-widget='{
-            "origin-src": "../node_modules/@coinpaprika/widget-currency"
-        }'></script>
-```
-
-### Via bower
-
-`bower install coinpaprika-widget-currency --save`
-
-Then add this to your HTML, replacing data parameters
-
-```html
-<div class="coinpaprika-currency-widget"></div>
-<script src="../bower_components/coinpaprika-widget-currency/dist/widget.min.js" 
-        data-cp-currency-widget='{
-            "origin-src": "../bower_components/coinpaprika-widget-currency"
+            "origin-src": "../node_modules/@coinpaprika/widget-currency/dist"
         }'></script>
 ```
 
@@ -157,7 +139,7 @@ Then add this to your HTML, replacing data parameters
 <div class="coinpaprika-currency-widget" 
      data-currency="xrp-xrp"
      data-update-active="true"></div>
-<script src="https://unpkg.com/@coinpaprika/widget-currency/dist/widget.min.js"></script>
+<script src="https://unpkg.com/@coinpaprika/widget-currency/dist/widget.umd.js"></script>
 ```
 
 ## Live Demo

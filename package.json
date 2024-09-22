@@ -1,26 +1,30 @@
 {
   "name": "@coinpaprika/widget-currency",
-  "version": "1.1.12",
+  "version": "1.2.0",
   "description": "A widget showing cryptocurrency stats that you can easily embed in your website.",
-  "main": "src/widget.js",
+  "type": "module",
+  "main": "dist/widget.js",
+  "module": "dist/widget.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/widget.es.js",
+      "require": "./dist/widget.umd.js"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/coinpaprika/widget-currency/"
   },
   "scripts": {
-    "build": "rm -r dist/* && npm run browserify && npm run uglify && npm run scss && npm run copy",
-    "browserify": "browserify src/widget.js -o dist/widget.js -d -t [ babelify --presets [ @babel/preset-env ] ]",
-    "watch-js": "watchify -p [ browserify-livereload --host 127.0.0.1 --port 1332 ] src/widget.js -o dist/widget.js -v",
-    "uglify": "uglifyjs dist/widget.js --comments /^[!]/ -mco dist/widget.min.js",
-    "scss": "node-sass ./src/scss/widget.scss > ./dist/widget.min.css --output-style compressed",
-    "watch-css": "nodemon -e scss -x npm run scss",
-    "watch": "parallelshell \"npm run watch-css\" \"npm run watch-js\" -w -v",
+    "dev": "vite",
+    "build": "vite build && npm run copy && npm run scss",
+    "preview": "vite preview",
+    "scss": "sass src/scss/widget.scss:dist/widget.min.css --style compressed",
+    "watch-css": "sass --watch src/scss/widget.scss:dist/widget.min.css --style compressed",
     "copy": "npm run copy-lang && npm run copy-img && npm run copy-data",
-    "copy-lang": "copyfiles './src/lang/*' -f ./dist/lang/ && echo 'Lang files copied.'",
-    "copy-img": "copyfiles './src/img/*' -f ./dist/img/ && echo 'Img files copied.'",
-    "copy-data": "copyfiles './src/data/*' -f ./dist/data/ && echo 'Data files copied.'",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "http-server -o -p 1332"
+    "copy-lang": "copyfiles './src/lang/*' -f ./dist/lang/",
+    "copy-img": "copyfiles './src/img/*' -f ./dist/img/",
+    "copy-data": "copyfiles './src/data/*' -f ./dist/data/"
   },
   "keywords": [
     "coinpaprika",
@@ -29,6 +33,9 @@
     "stats",
     "embed"
   ],
+  "engines": {
+    "node": "^18.0.0 || ^20.0.0"
+  },
   "author": "Coinpaprika <contact@coinpaprika.com> (https://coinpaprika.com/)",
   "license": "MIT",
   "bugs": {
@@ -36,17 +43,9 @@
   },
   "homepage": "https://coinpaprika.com",
   "devDependencies": {
-    "@babel/preset-env": "^7.21.4",
-    "babel-core": "^6.26.3",
-    "babelify": "^10.0.0",
-    "browserify": "^17.0.0",
-    "browserify-livereload": "^1.0.10",
     "copyfiles": "^2.4.1",
-    "http-server": "^14.1.1",
-    "node-sass": "^8.0.0",
-    "nodemon": "^2.0.22",
-    "parallelshell": "^3.0.2",
-    "uglify-js": "^3.17.4",
-    "watchify": "^4.0.0"
+    "rollup-plugin-terser": "^7.0.2",
+    "sass": "^1.79.3",
+    "vite": "^4.5.5"
   }
 }
