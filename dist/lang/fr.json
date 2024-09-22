@@ -1,0 +1,17 @@
+{
+  "rank": "Rang",
+  "ath": "ATH",
+  "volume_24h": "Volume 24h",
+  "market_cap": "Capitalisation boursière",
+  "powered_by": "alimenté par",
+  "zoom_in": "Zoomer: ",
+  "24h": "24h",
+  "7d": "7j",
+  "30d": "30j",
+  "1q": "1T",
+  "1y": "1A",
+  "ytd": "D depuis le début de l'année",
+  "all": "TOUS",
+  "data_unavailable": "Les données ne sont actuellement pas disponibles",
+  "data_loading": "Les données se chargent..."
+}

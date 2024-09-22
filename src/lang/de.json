@@ -1,0 +1,17 @@
+{
+  "rank": "Rang",
+  "ath": "ATH",
+  "volume_24h": "Volumen 24h",
+  "market_cap": "Marktkapitalisierung",
+  "powered_by": "betrieben von",
+  "zoom_in": "Vergrößern: ",
+  "24h": "24h",
+  "7d": "7T",
+  "30d": "30T",
+  "1q": "1Q",
+  "1y": "1J",
+  "ytd": "JTD",
+  "all": "ALLE",
+  "data_unavailable": "Daten sind derzeit nicht verfügbar",
+  "data_loading": "Daten werden geladen..."
+}
