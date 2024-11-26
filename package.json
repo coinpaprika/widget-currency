@@ -1,6 +1,6 @@
 {
   "name": "@coinpaprika/widget-currency",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A widget showing cryptocurrency stats that you can easily embed in your website.",
   "type": "module",
   "main": "dist/widget.js",
