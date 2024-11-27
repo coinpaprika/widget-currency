@@ -1655,7 +1655,8 @@ class bootstrapClass {
   round(amount, decimal = 8, direction = "round") {
     amount = parseFloat(amount);
     decimal = Math.pow(10, decimal);
-    return Math[direction](amount * decimal) / decimal;
+    let rounded = Math[direction](amount * decimal) / decimal;
+    return rounded.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
   loop(arr, fn, busy, err, i = 0) {
     const body = (ok, er) => {
