@@ -65,7 +65,7 @@ class widgetsController {
               "//code.highcharts.com/stock/highstock.js",
               "//code.highcharts.com/modules/exporting.js",
               "//code.highcharts.com/modules/no-data-to-display.js",
-              "//highcharts.github.io/pattern-fill/pattern-fill-v2.js",
+              "//code.highcharts.com/modules/pattern-fill.js",
             ];
             return newSettings.modules.indexOf("chart") > -1 &&
               !window.Highcharts
