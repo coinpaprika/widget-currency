@@ -1253,7 +1253,8 @@ class chartClass {
           showInLegend: false,
         },
         {
-          color: `url(#fill-pattern${this.isNightMode ? "-night" : ""})`,
+          // color: `url(#fill-pattern${this.isNightMode ? "-night" : ""})`,
+          color: this.isNightMode ? '#9b9b9b' : '#e3e3e3',
           name: "Volume",
           id: "volume",
           data: [],
@@ -2016,7 +2017,8 @@ class bootstrapClass {
     amount = parseFloat(amount);
     decimal = Math.pow(10, decimal);
     let rounded = Math[direction](amount * decimal) / decimal;
-    return rounded.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const maxFractionDigits = rounded < 1 ? 6 : 2;
+    return rounded.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: maxFractionDigits });
   }
 
   loop(arr, fn, busy, err, i = 0) {
