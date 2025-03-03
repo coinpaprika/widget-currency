@@ -1316,7 +1316,9 @@ class chartClass {
     const footer = "</table></div>";
     let content = "";
     pointer.points.forEach((point) => {
-      content += '<tr><td class="cp-chart-tooltip-currency__row"><svg class="cp-chart-tooltip-currency__icon" width="5" height="5"><rect x="0" y="0" width="5" height="5" fill="' + point.series.color + '" fill-opacity="1"></rect></svg>' + point.series.name + ": " + point.y.toLocaleString("en-US", { maximumFractionDigits: 8 });
+      var _a, _b, _c;
+      const value = ((_b = (_a = point.y) == null ? void 0 : _a.toString()) == null ? void 0 : _b.includes("e")) ? (_c = point.y) == null ? void 0 : _c.toPrecision(3) : point.y.toLocaleString("en-US", { maximumFractionDigits: 8 });
+      content += '<tr><td class="cp-chart-tooltip-currency__row"><svg class="cp-chart-tooltip-currency__icon" width="5" height="5"><rect x="0" y="0" width="5" height="5" fill="' + point.series.color + '" fill-opacity="1"></rect></svg>' + point.series.name + ": " + value;
       " " + (point.series.name.toLowerCase().search(search.toLowerCase()) > -1 ? "" : label) + "</td></tr>";
     });
     return header + content + footer;
@@ -1613,7 +1615,35 @@ class bootstrapClass {
     });
     return promise;
   }
+  convertScientificToDecimalNotation(num) {
+    if (!num && num !== 0)
+      return "";
+    const sign = Math.sign(num);
+    if (/\d+\.?\d*e[+-]*\d+/i.test(num)) {
+      const zero = "0";
+      const parts = String(num).toLowerCase().split("e");
+      const e = parts.pop();
+      let l = Math.abs(e);
+      const direction = e / l;
+      const coeffArray = parts[0].split(".");
+      if (direction === -1) {
+        coeffArray[0] = Math.abs(coeffArray[0]);
+        num = `${zero}.${new Array(l).join(zero)}${coeffArray.join("")}`;
+      } else {
+        const dec = coeffArray[1];
+        if (dec)
+          l -= dec.length;
+        num = coeffArray.join("") + new Array(l + 1).join(zero);
+      }
+    }
+    if (sign < 0) {
+      num = -num;
+    }
+    return num;
+  }
   parseNumber(number, precision) {
+    var _a, _b, _c, _d;
+    const sientificBreakpoint = 1e-7;
     if (!number && number !== 0)
       return number;
     if (number === this.emptyValue || number === this.emptyData)
@@ -1632,6 +1662,11 @@ class bootstrapClass {
       let natural = spliced.slice(0, spliced.length - 2);
       let decimal = spliced.slice(spliced.length - 2);
       return natural + "." + decimal + " " + parameter;
+    } else if (number < sientificBreakpoint) {
+      const decimalStr = number.toString().includes("e") ? this.convertScientificToDecimalNotation(number).toString() : number.toString();
+      const leadingZeros = ((_d = (_c = (_b = (_a = decimalStr.split(".")) == null ? void 0 : _a[1]) == null ? void 0 : _b.match(/^0+/)) == null ? void 0 : _c[0]) == null ? void 0 : _d.length) || 0;
+      const significantDigits = decimalStr.replace(/^0\.0+/, "").slice(0, 3);
+      return leadingZeros ? `0.0<sub>${leadingZeros}</sub>${significantDigits}` : `0.00`;
     } else {
       let isDecimal = number % 1 > 0;
       if (isDecimal) {
