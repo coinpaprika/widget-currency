@@ -447,7 +447,7 @@ class widgetsClass {
               );
             });
             promise = promise.then((result) => {
-              return updateElement.innerText = result || cpBootstrap.emptyData;
+              return updateElement.innerHTML = result || cpBootstrap.emptyData;
             });
             return promise;
           } else {
