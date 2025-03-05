@@ -1639,6 +1639,7 @@ class chartClass {
     const footer = "</table></div>";
     let content = "";
     pointer.points.forEach((point) => {
+      const value = point.y?.toString()?.includes('e') ? point.y?.toPrecision(3) : point.y.toLocaleString("en-US", { maximumFractionDigits: 8 });
       content +=
         "<tr>" +
         '<td class="cp-chart-tooltip-currency__row">' +
@@ -1647,7 +1648,7 @@ class chartClass {
         '" fill-opacity="1"></rect></svg>' +
         point.series.name +
         ": " +
-        point.y.toLocaleString("en-US", { maximumFractionDigits: 8 });
+        value
       " " +
         (point.series.name.toLowerCase().search(search.toLowerCase()) > -1
           ? ""
@@ -1973,7 +1974,36 @@ class bootstrapClass {
     return promise;
   }
 
+  convertScientificToDecimalNotation(num) {
+    if (!num && num !== 0) return '';
+    const sign = Math.sign(num);
+    // if the number is in scientific notation remove it
+    if (/\d+\.?\d*e[+-]*\d+/i.test(num)) {
+      const zero = '0';
+      const parts = String(num).toLowerCase().split('e'); // split into coeff and exponent
+      const e = parts.pop(); // store the exponential part
+      let l = Math.abs(e); // get the number of zeros
+      const direction = e / l; // use to determine the zeroes on the left or right
+      const coeffArray = parts[0].split('.');
+
+      if (direction === -1) {
+        coeffArray[0] = Math.abs(coeffArray[0]);
+        num = `${zero}.${new Array(l).join(zero)}${coeffArray.join('')}`;
+      } else {
+        const dec = coeffArray[1];
+        if (dec) l -= dec.length;
+        num = coeffArray.join('') + new Array(l + 1).join(zero);
+      }
+    }
+
+    if (sign < 0) {
+      num = -num;
+    }
+    return num;
+  }
+
   parseNumber(number, precision) {
+    const sientificBreakpoint = 0.0000001;
     if (!number && number !== 0) return number;
     if (number === this.emptyValue || number === this.emptyData) return number;
     number = parseFloat(number);
@@ -1991,6 +2021,14 @@ class bootstrapClass {
       let natural = spliced.slice(0, spliced.length - 2);
       let decimal = spliced.slice(spliced.length - 2);
       return natural + "." + decimal + " " + parameter;
+    } else if (number < sientificBreakpoint) {
+      const decimalStr = number.toString().includes('e') ? this.convertScientificToDecimalNotation(number).toString() : number.toString();
+      const leadingZeros = decimalStr.split('.')?.[1]?.match(/^0+/)?.[0]?.length || 0;
+      const significantDigits = decimalStr.replace(/^0\.0+/, '').slice(0, 3);
+
+      return leadingZeros ?
+        `0.0<sub>${leadingZeros}</sub>${significantDigits}` :
+        `0.00`;
     } else {
       let isDecimal = number % 1 > 0;
       if (isDecimal) {
