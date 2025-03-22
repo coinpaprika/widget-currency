@@ -1295,6 +1295,11 @@ class chartClass {
       return this.parseOptions(this.options);
     });
     promise = promise.then((options) => {
+      window.Highcharts.setOptions({
+        lang: {
+          numericSymbols: ['k', 'M'],
+        },
+      });
       return window.Highcharts
         ? Highcharts.stockChart(this.container.id, options, (chart) =>
             this.bind(chart),
