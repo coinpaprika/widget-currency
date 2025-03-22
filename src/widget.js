@@ -94,7 +94,7 @@ class widgetsClass {
       currency: "btc-bitcoin",
       primary_currency: "USD",
       range_list: ["24h", "7d", "30d", "1q", "1y", "ytd", "all"],
-      range: "7d",
+      range: "24h",
       modules: ["market_details", "chart"],
       update_active: false,
       update_timeout: "30s",
@@ -892,6 +892,8 @@ class chartClass {
     this.callback = null;
     this.replaceCallback = null;
     this.extremesDataUrl = this.getExtremesDataUrl(container.id);
+    this.firstPrice = null;
+    this.lastPrice = null;
     this.defaultOptions = {
       chart: {
         alignTicks: false,
@@ -901,6 +903,18 @@ class chartClass {
         },
         events: {
           render: (e) => {
+            if (this?.chart_data?.price && this?.chart_data?.price?.length > 0) {
+              const firstItem = this.chart_data.price[0];
+              const lastItem = this.chart_data.price[this.chart_data.price.length - 1];
+              const firstPrice = firstItem[1];
+              const lastPrice = lastItem[1];
+              const priceSeries = this.getPriceSeries()
+              if (firstPrice && lastPrice && this.firstPrice !== firstPrice && this.lastPrice !== lastPrice) {
+                this.firstPrice = firstPrice;
+                this.lastPrice = lastPrice;
+                priceSeries.update(lastPrice >= firstPrice ? this.getChartPositiveGradient() : this.getChartNegativeGradient(), true)
+              }
+            }
             if (e.target.annotations) {
               let chart = e.target.annotations.chart;
               cpBootstrap.loop(chart.annotations.allItems, (annotation) => {
@@ -1234,7 +1248,7 @@ class chartClass {
       series: [
         {
           //order of the series matters
-          color: "#5085ec",
+          color: "transparent",
           name: "Price",
           id: "price",
           data: [],
@@ -1290,6 +1304,35 @@ class chartClass {
     return promise;
   }
 
+  getPriceSeries() {
+    return this.chart?.series?.find((serie) => serie.userOptions?.id === 'price');
+  }
+
+  getChartPositiveGradient() {
+    return {
+      color: '#008000',
+      fillColor: {
+        linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+        stops: [
+          [0, 'rgba(67, 170, 5, 0.4)'],
+          [1, 'rgba(67, 170, 5, 0)'],
+        ],
+      },
+    };
+  }
+
+  getChartNegativeGradient() {
+    return {
+      color: '#FF0000',
+      fillColor: {
+        linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+        stops: [
+          [0, 'rgba(225, 82, 65, 0.4)'],
+          [1, 'rgba(225, 82, 65, 0)'],
+        ],
+      },
+    };
+  }
   parseOptions(options) {
     let promise = Promise.resolve();
     promise = promise.then(() => {
