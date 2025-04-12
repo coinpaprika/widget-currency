@@ -617,41 +617,34 @@ class widgetsClass {
 
   widgetMainElementData(index) {
     let data = this.states[index];
-    return (
-      '<h3><a href="' +
-      this.coin_link(data.currency) +
-      '">' +
-      '<span class="nameTicker">' +
-      (data.ticker.name || cpBootstrap.emptyData) +
-      "</span>" +
-      '<span class="symbolTicker">' +
-      (data.ticker.symbol || cpBootstrap.emptyData) +
-      "</span>" +
-      "</a></h3>" +
-      "<strong>" +
-      '<span class="priceTicker parseNumber">' +
-      (cpBootstrap.parseNumber(data.ticker.price) || cpBootstrap.emptyData) +
-      "</span> " +
-      '<span class="primaryCurrency">' +
-      data.primary_currency +
-      " </span>" +
-      '<span class="price_change_24hTicker cp-widget__rank cp-widget__rank-' +
-      (data.ticker.price_change_24h > 0
-        ? "up"
-        : data.ticker.price_change_24h < 0
-          ? "down"
-          : "neutral") +
-      '">(' +
-      (cpBootstrap.round(data.ticker.price_change_24h, 2) ||
-        cpBootstrap.emptyValue) +
-      "%)</span>" +
-      "</strong>" +
-      '<span class="cp-widget__rank-label"><span class="cp-translation translation_rank">' +
-      this.getTranslation(index, "rank") +
-      '</span> <span class="rankTicker">' +
-      (data.ticker.rank || cpBootstrap.emptyData) +
-      "</span></span>"
-    );
+    const priceChangeClass = data.ticker.price_change_24h > 0 
+      ? "up" 
+      : data.ticker.price_change_24h < 0 
+        ? "down" 
+        : "neutral";
+  
+    const isIframe = window.self !== window.top;    
+
+    const coinNameElements = `
+      <span class="nameTicker">${data.ticker.name || cpBootstrap.emptyData}</span>
+      <span class="symbolTicker">${data.ticker.symbol || cpBootstrap.emptyData}</span>
+    `
+    const coinTitle = isIframe ? coinNameElements : `<a href="${this.coin_link(data.currency)}">${coinNameElements}</a>`;
+
+    return `
+      <h3>${coinTitle}</h3>
+      <strong>
+        <span class="priceTicker parseNumber">${cpBootstrap.parseNumber(data.ticker.price) || cpBootstrap.emptyData}</span> 
+        <span class="primaryCurrency">${data.primary_currency} </span>
+        <span class="price_change_24hTicker cp-widget__rank cp-widget__rank-${priceChangeClass}">
+          (${cpBootstrap.round(data.ticker.price_change_24h, 2) || cpBootstrap.emptyValue}%)
+        </span>
+      </strong>
+      <span class="cp-widget__rank-label">
+        <span class="cp-translation translation_rank">${this.getTranslation(index, "rank")}</span> 
+        <span class="rankTicker">${data.ticker.rank || cpBootstrap.emptyData}</span>
+      </span>
+    `;
   }
 
   widgetMainElementMessage(index) {
