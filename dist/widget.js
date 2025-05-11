@@ -1070,7 +1070,7 @@ class chartClass {
   }
   getChartPositiveGradient() {
     return {
-      color: "#008000",
+      color: "#43AA05",
       fillColor: {
         linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
         stops: [
@@ -1082,7 +1082,7 @@ class chartClass {
   }
   getChartNegativeGradient() {
     return {
-      color: "#FF0000",
+      color: "#E15241",
       fillColor: {
         linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
         stops: [
