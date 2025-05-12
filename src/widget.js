@@ -1303,7 +1303,28 @@ class chartClass {
   }
 
   getPriceSeries() {
-    return this.chart?.series?.find((serie) => serie.userOptions?.id === 'price');
+    return this.findPriceSeries(this.chart);
+  }
+
+  findPriceSeries(chart) {
+    if (!chart) throw new Error('Chart is not provided');
+    if (!chart.series || !Array.isArray(chart.series)) return null;
+    return chart.series.find((serie) => serie.userOptions?.id === 'price');
+  }
+
+  updatePriceGradientOnZoom(zoomEvent) {
+    if (!zoomEvent.min || !zoomEvent.max || !zoomEvent.target || !zoomEvent.target.closestPointRange) return;
+    const priceSeries = this.getPriceSeries()
+    const minDate = zoomEvent.min - (zoomEvent.min % zoomEvent.target.closestPointRange)
+    const maxDate = zoomEvent.max - (zoomEvent.max % zoomEvent.target.closestPointRange)
+    const firstPriceItem = this.chart_data?.price?.find(([x]) => x === minDate)
+    const lastPriceItem = this.chart_data?.price?.find(([x]) => x === maxDate)
+    const firstPrice = firstPriceItem?.[1]
+    const lastPrice = lastPriceItem?.[1]
+    
+    if (firstPrice && lastPrice) {
+      priceSeries.update(lastPrice >= firstPrice ? this.getChartPositiveGradient() : this.getChartNegativeGradient(), true)
+    }
   }
 
   getChartPositiveGradient() {
@@ -1331,6 +1352,7 @@ class chartClass {
       },
     };
   }
+
   parseOptions(options) {
     let promise = Promise.resolve();
     promise = promise.then(() => {
@@ -1796,6 +1818,7 @@ class chartClass {
                   e.min &&
                   e.max
                 ) {
+                  this.updatePriceGradientOnZoom(e)
                   document.dispatchEvent(
                     new CustomEvent(this.id + "SetExtremes", {
                       detail: {

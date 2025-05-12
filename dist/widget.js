@@ -1062,11 +1062,32 @@ class chartClass {
     return promise;
   }
   getPriceSeries() {
-    var _a, _b;
-    return (_b = (_a = this.chart) == null ? void 0 : _a.series) == null ? void 0 : _b.find((serie) => {
-      var _a2;
-      return ((_a2 = serie.userOptions) == null ? void 0 : _a2.id) === "price";
+    return this.findPriceSeries(this.chart);
+  }
+  findPriceSeries(chart) {
+    if (!chart)
+      throw new Error("Chart is not provided");
+    if (!chart.series || !Array.isArray(chart.series))
+      return null;
+    return chart.series.find((serie) => {
+      var _a;
+      return ((_a = serie.userOptions) == null ? void 0 : _a.id) === "price";
     });
+  }
+  updatePriceGradientOnZoom(zoomEvent) {
+    var _a, _b, _c, _d;
+    if (!zoomEvent.min || !zoomEvent.max || !zoomEvent.target || !zoomEvent.target.closestPointRange)
+      return;
+    const priceSeries = this.getPriceSeries();
+    const minDate = zoomEvent.min - zoomEvent.min % zoomEvent.target.closestPointRange;
+    const maxDate = zoomEvent.max - zoomEvent.max % zoomEvent.target.closestPointRange;
+    const firstPriceItem = (_b = (_a = this.chart_data) == null ? void 0 : _a.price) == null ? void 0 : _b.find(([x]) => x === minDate);
+    const lastPriceItem = (_d = (_c = this.chart_data) == null ? void 0 : _c.price) == null ? void 0 : _d.find(([x]) => x === maxDate);
+    const firstPrice = firstPriceItem == null ? void 0 : firstPriceItem[1];
+    const lastPrice = lastPriceItem == null ? void 0 : lastPriceItem[1];
+    if (firstPrice && lastPrice) {
+      priceSeries.update(lastPrice >= firstPrice ? this.getChartPositiveGradient() : this.getChartNegativeGradient(), true);
+    }
   }
   getChartPositiveGradient() {
     return {
@@ -1487,6 +1508,7 @@ class chartClass {
             events: {
               setExtremes: (e) => {
                 if ((e.trigger === "navigator" || e.trigger === "zoom") && e.min && e.max) {
+                  this.updatePriceGradientOnZoom(e);
                   document.dispatchEvent(
                     new CustomEvent(this.id + "SetExtremes", {
                       detail: {
