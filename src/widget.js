@@ -108,6 +108,7 @@ class widgetsClass {
       data_src: null,
       origin_src: "https://unpkg.com/@coinpaprika/widget-currency@latest",
       show_details_currency: false,
+      volume_visible: true,
       ticker: {
         name: undefined,
         symbol: undefined,
@@ -218,6 +219,12 @@ class widgetsClass {
             index,
             "show_details_currency",
             mainElement.dataset.showDetailsCurrency === "true",
+          );
+        if (mainElement.dataset.volumeVisible)
+          this.updateData(
+            index,
+            "volume_visible",
+            mainElement.dataset.volumeVisible === "true",
           );
         if (mainElement.dataset.updateActive)
           this.updateData(
@@ -877,6 +884,7 @@ class chartClass {
     this.chart = null;
     this.currency = state.currency;
     this.container = container;
+    this.volume_visible = state.volume_visible !== undefined ? state.volume_visible : true;
     this.options = this.setOptions();
     this.defaultRange = state.range || "7d";
     this.customDate = state.customDate || false;
@@ -1270,13 +1278,13 @@ class chartClass {
           lineWidth: 0,
           yAxis: 0,
           zIndex: 0,
-          visible: true,
+          visible: this.volume_visible,
           clickable: true,
           threshold: null,
           tooltip: {
             valueDecimals: 0,
           },
-          showInNavigator: true,
+          showInNavigator: false,
         },
       ],
     };
